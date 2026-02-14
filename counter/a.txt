@@ -1,0 +1,773 @@
+counter v0.1.0 (/opt/workspace/solana/solar-bootcamp/counter)
+├── solana-program v3.0.0
+│   ├── solana-account-info v3.1.0
+│   │   ├── solana-address v2.1.0
+│   │   │   ├── solana-atomic-u64 v3.0.0
+│   │   │   ├── solana-program-error v3.0.0
+│   │   │   ├── solana-sanitize v3.0.1
+│   │   │   └── solana-sha256-hasher v3.1.0
+│   │   │       └── solana-hash v4.1.0
+│   │   │           ├── solana-atomic-u64 v3.0.0
+│   │   │           └── solana-sanitize v3.0.1
+│   │   ├── solana-program-error v3.0.0 (*)
+│   │   └── solana-program-memory v3.1.0
+│   ├── solana-big-mod-exp v3.0.0
+│   ├── solana-blake3-hasher v3.1.0
+│   │   └── solana-hash v4.1.0 (*)
+│   ├── solana-borsh v3.0.0
+│   ├── solana-clock v3.0.0
+│   │   ├── solana-sdk-ids v3.1.0
+│   │   │   └── solana-address v2.1.0 (*)
+│   │   ├── solana-sdk-macro v3.0.0 (proc-macro)
+│   │   └── solana-sysvar-id v3.1.0
+│   │       ├── solana-address v2.1.0 (*)
+│   │       └── solana-sdk-ids v3.1.0 (*)
+│   ├── solana-cpi v3.1.0
+│   │   ├── solana-account-info v3.1.0 (*)
+│   │   ├── solana-instruction v3.1.0
+│   │   │   ├── solana-instruction-error v2.1.0
+│   │   │   │   └── solana-program-error v3.0.0 (*)
+│   │   │   └── solana-pubkey v4.0.0
+│   │   │       └── solana-address v2.1.0 (*)
+│   │   ├── solana-program-error v3.0.0 (*)
+│   │   └── solana-pubkey v4.0.0 (*)
+│   ├── solana-epoch-rewards v3.0.0
+│   │   ├── solana-hash v3.1.0
+│   │   │   └── solana-hash v4.1.0 (*)
+│   │   ├── solana-sdk-ids v3.1.0 (*)
+│   │   ├── solana-sdk-macro v3.0.0 (proc-macro) (*)
+│   │   └── solana-sysvar-id v3.1.0 (*)
+│   ├── solana-epoch-schedule v3.0.0
+│   │   ├── solana-sdk-ids v3.1.0 (*)
+│   │   ├── solana-sdk-macro v3.0.0 (proc-macro) (*)
+│   │   └── solana-sysvar-id v3.1.0 (*)
+│   ├── solana-epoch-stake v3.0.0
+│   │   └── solana-pubkey v3.0.0
+│   │       └── solana-address v1.1.0
+│   │           └── solana-address v2.1.0 (*)
+│   ├── solana-example-mocks v3.0.0
+│   │   ├── solana-address-lookup-table-interface v3.0.1
+│   │   │   ├── solana-clock v3.0.0 (*)
+│   │   │   ├── solana-instruction v3.1.0 (*)
+│   │   │   ├── solana-instruction-error v2.1.0 (*)
+│   │   │   ├── solana-pubkey v4.0.0 (*)
+│   │   │   ├── solana-sdk-ids v3.1.0 (*)
+│   │   │   └── solana-slot-hashes v3.0.0
+│   │   │       ├── solana-hash v3.1.0 (*)
+│   │   │       ├── solana-sdk-ids v3.1.0 (*)
+│   │   │       └── solana-sysvar-id v3.1.0 (*)
+│   │   ├── solana-clock v3.0.0 (*)
+│   │   ├── solana-hash v3.1.0 (*)
+│   │   ├── solana-instruction v3.1.0 (*)
+│   │   ├── solana-keccak-hasher v3.1.0
+│   │   │   └── solana-hash v4.1.0 (*)
+│   │   ├── solana-message v3.0.1
+│   │   │   ├── solana-address v1.1.0 (*)
+│   │   │   ├── solana-hash v3.1.0 (*)
+│   │   │   ├── solana-instruction v3.1.0 (*)
+│   │   │   ├── solana-sanitize v3.0.1
+│   │   │   ├── solana-sdk-ids v3.1.0 (*)
+│   │   │   ├── solana-short-vec v3.2.0
+│   │   │   └── solana-transaction-error v3.0.0
+│   │   │       ├── solana-instruction-error v2.1.0 (*)
+│   │   │       └── solana-sanitize v3.0.1
+│   │   ├── solana-nonce v3.0.0
+│   │   │   ├── solana-fee-calculator v3.0.0
+│   │   │   ├── solana-hash v3.1.0 (*)
+│   │   │   ├── solana-pubkey v3.0.0 (*)
+│   │   │   └── solana-sha256-hasher v3.1.0 (*)
+│   │   ├── solana-pubkey v3.0.0 (*)
+│   │   ├── solana-sdk-ids v3.1.0 (*)
+│   │   ├── solana-system-interface v2.0.0
+│   │   │   ├── solana-instruction v3.1.0 (*)
+│   │   │   ├── solana-msg v3.0.0
+│   │   │   ├── solana-program-error v3.0.0 (*)
+│   │   │   └── solana-pubkey v3.0.0 (*)
+│   ├── solana-fee-calculator v3.0.0 (*)
+│   ├── solana-hash v3.1.0 (*)
+│   ├── solana-instruction v3.1.0 (*)
+│   ├── solana-instruction-error v2.1.0 (*)
+│   ├── solana-instructions-sysvar v3.0.0
+│   │   ├── solana-account-info v3.1.0 (*)
+│   │   ├── solana-instruction v3.1.0 (*)
+│   │   ├── solana-instruction-error v2.1.0 (*)
+│   │   ├── solana-program-error v3.0.0 (*)
+│   │   ├── solana-pubkey v3.0.0 (*)
+│   │   ├── solana-sanitize v3.0.1
+│   │   ├── solana-sdk-ids v3.1.0 (*)
+│   │   ├── solana-serialize-utils v3.1.0
+│   │   │   ├── solana-instruction-error v2.1.0 (*)
+│   │   │   ├── solana-pubkey v3.0.0 (*)
+│   │   │   └── solana-sanitize v3.0.1
+│   │   └── solana-sysvar-id v3.1.0 (*)
+│   ├── solana-keccak-hasher v3.1.0 (*)
+│   ├── solana-last-restart-slot v3.0.0
+│   │   ├── solana-sdk-ids v3.1.0 (*)
+│   │   ├── solana-sdk-macro v3.0.0 (proc-macro) (*)
+│   │   └── solana-sysvar-id v3.1.0 (*)
+│   ├── solana-msg v3.0.0
+│   ├── solana-native-token v3.0.0
+│   ├── solana-program-entrypoint v3.1.1
+│   │   ├── solana-account-info v3.1.0 (*)
+│   │   ├── solana-define-syscall v4.0.1
+│   │   ├── solana-program-error v3.0.0 (*)
+│   │   └── solana-pubkey v4.0.0 (*)
+│   ├── solana-program-error v3.0.0 (*)
+│   ├── solana-program-memory v3.1.0
+│   ├── solana-program-option v3.0.0
+│   ├── solana-program-pack v3.0.0
+│   │   └── solana-program-error v3.0.0 (*)
+│   ├── solana-pubkey v3.0.0 (*)
+│   ├── solana-rent v3.1.0
+│   │   ├── solana-sdk-ids v3.1.0 (*)
+│   │   ├── solana-sdk-macro v3.0.0 (proc-macro) (*)
+│   │   └── solana-sysvar-id v3.1.0 (*)
+│   ├── solana-sdk-ids v3.1.0 (*)
+│   ├── solana-secp256k1-recover v3.1.0
+│   ├── solana-serde-varint v3.0.0
+│   ├── solana-serialize-utils v3.1.0 (*)
+│   ├── solana-sha256-hasher v3.1.0 (*)
+│   ├── solana-short-vec v3.2.0 (*)
+│   ├── solana-slot-hashes v3.0.0 (*)
+│   ├── solana-slot-history v3.0.0
+│   │   ├── solana-sdk-ids v3.1.0 (*)
+│   │   └── solana-sysvar-id v3.1.0 (*)
+│   ├── solana-stable-layout v3.0.0
+│   │   ├── solana-instruction v3.1.0 (*)
+│   │   └── solana-pubkey v3.0.0 (*)
+│   ├── solana-sysvar v3.1.1
+│   │   ├── solana-account-info v3.1.0 (*)
+│   │   ├── solana-clock v3.0.0 (*)
+│   │   ├── solana-epoch-rewards v3.0.0 (*)
+│   │   ├── solana-epoch-schedule v3.0.0 (*)
+│   │   ├── solana-fee-calculator v3.0.0 (*)
+│   │   ├── solana-hash v4.1.0 (*)
+│   │   ├── solana-instruction v3.1.0 (*)
+│   │   ├── solana-last-restart-slot v3.0.0 (*)
+│   │   ├── solana-program-entrypoint v3.1.1 (*)
+│   │   ├── solana-program-error v3.0.0 (*)
+│   │   ├── solana-program-memory v3.1.0
+│   │   ├── solana-pubkey v4.0.0 (*)
+│   │   ├── solana-rent v3.1.0 (*)
+│   │   ├── solana-sdk-ids v3.1.0 (*)
+│   │   ├── solana-sdk-macro v3.0.0 (proc-macro) (*)
+│   │   ├── solana-slot-hashes v3.0.0 (*)
+│   │   ├── solana-slot-history v3.0.0 (*)
+│   │   └── solana-sysvar-id v3.1.0 (*)
+│   └── solana-sysvar-id v3.1.0 (*)
+├── solana-sdk v3.0.0
+│   ├── solana-account v3.4.0
+│   │   ├── solana-account-info v3.1.0 (*)
+│   │   ├── solana-clock v3.0.0 (*)
+│   │   ├── solana-instruction-error v2.1.0 (*)
+│   │   ├── solana-pubkey v4.0.0 (*)
+│   │   ├── solana-sdk-ids v3.1.0 (*)
+│   │   └── solana-sysvar v3.1.1 (*)
+│   ├── solana-epoch-info v3.1.0
+│   ├── solana-epoch-rewards-hasher v3.1.0
+│   │   ├── solana-address v2.1.0 (*)
+│   │   └── solana-hash v4.1.0 (*)
+│   ├── solana-fee-structure v3.0.0
+│   ├── solana-inflation v3.0.0
+│   ├── solana-keypair v3.1.0
+│   │   ├── solana-address v2.1.0 (*)
+│   │   ├── solana-derivation-path v3.0.0
+│   │   ├── solana-seed-derivable v3.0.0
+│   │   │   └── solana-derivation-path v3.0.0 (*)
+│   │   ├── solana-seed-phrase v3.0.0
+│   │   ├── solana-signature v3.1.0
+│   │   │   └── solana-sanitize v3.0.1
+│   │   └── solana-signer v3.0.0
+│   │       ├── solana-pubkey v3.0.0 (*)
+│   │       ├── solana-signature v3.1.0 (*)
+│   │       └── solana-transaction-error v3.0.0 (*)
+│   ├── solana-message v3.0.1 (*)
+│   ├── solana-offchain-message v3.0.0
+│   │   ├── solana-hash v3.1.0 (*)
+│   │   ├── solana-packet v3.0.0
+│   │   ├── solana-pubkey v3.0.0 (*)
+│   │   ├── solana-sanitize v3.0.1
+│   │   ├── solana-sha256-hasher v3.1.0 (*)
+│   │   ├── solana-signature v3.1.0 (*)
+│   │   └── solana-signer v3.0.0 (*)
+│   ├── solana-presigner v3.0.0
+│   │   ├── solana-pubkey v3.0.0 (*)
+│   │   ├── solana-signature v3.1.0 (*)
+│   │   └── solana-signer v3.0.0 (*)
+│   ├── solana-program v3.0.0 (*)
+│   ├── solana-program-memory v3.1.0
+│   ├── solana-pubkey v3.0.0 (*)
+│   ├── solana-sanitize v3.0.1
+│   ├── solana-sdk-ids v3.1.0 (*)
+│   ├── solana-sdk-macro v3.0.0 (proc-macro) (*)
+│   ├── solana-seed-derivable v3.0.0 (*)
+│   ├── solana-seed-phrase v3.0.0 (*)
+│   ├── solana-serde v3.0.0
+│   ├── solana-serde-varint v3.0.0 (*)
+│   ├── solana-short-vec v3.2.0 (*)
+│   ├── solana-shred-version v3.0.0
+│   │   ├── solana-hard-forks v3.0.0
+│   │   ├── solana-hash v3.1.0 (*)
+│   │   └── solana-sha256-hasher v3.1.0 (*)
+│   ├── solana-signature v3.1.0 (*)
+│   ├── solana-signer v3.0.0 (*)
+│   ├── solana-time-utils v3.0.0
+│   ├── solana-transaction v3.0.2
+│   │   ├── solana-address v2.1.0 (*)
+│   │   ├── solana-hash v4.1.0 (*)
+│   │   ├── solana-instruction v3.1.0 (*)
+│   │   ├── solana-instruction-error v2.1.0 (*)
+│   │   ├── solana-message v3.0.1 (*)
+│   │   ├── solana-sanitize v3.0.1
+│   │   ├── solana-sdk-ids v3.1.0 (*)
+│   │   ├── solana-short-vec v3.2.0 (*)
+│   │   ├── solana-signature v3.1.0 (*)
+│   │   ├── solana-signer v3.0.0 (*)
+│   │   └── solana-transaction-error v3.0.0 (*)
+│   ├── solana-transaction-error v3.0.0 (*)
+└── solana-system-program v3.1.8
+    ├── solana-account v3.4.0 (*)
+    ├── solana-bincode v3.1.0
+    │   └── solana-instruction-error v2.1.0 (*)
+    ├── solana-fee-calculator v3.0.0 (*)
+    ├── solana-instruction v3.1.0 (*)
+    ├── solana-nonce v3.0.0 (*)
+    ├── solana-nonce-account v3.0.0
+    │   ├── solana-account v3.4.0 (*)
+    │   ├── solana-hash v3.1.0 (*)
+    │   ├── solana-nonce v3.0.0 (*)
+    │   └── solana-sdk-ids v3.1.0 (*)
+    ├── solana-packet v3.0.0 (*)
+    ├── solana-program-runtime v3.1.8
+    │   ├── solana-account v3.4.0 (*)
+    │   ├── solana-account-info v3.1.0 (*)
+    │   ├── solana-clock v3.0.0 (*)
+    │   ├── solana-epoch-rewards v3.0.0 (*)
+    │   ├── solana-epoch-schedule v3.0.0 (*)
+    │   ├── solana-fee-structure v3.0.0 (*)
+    │   ├── solana-hash v3.1.0 (*)
+    │   ├── solana-instruction v3.1.0 (*)
+    │   ├── solana-last-restart-slot v3.0.0 (*)
+    │   ├── solana-loader-v3-interface v6.1.0
+    │   │   ├── solana-instruction v3.1.0 (*)
+    │   │   ├── solana-pubkey v3.0.0 (*)
+    │   │   └── solana-sdk-ids v3.1.0 (*)
+    │   ├── solana-program-entrypoint v3.1.1 (*)
+    │   ├── solana-pubkey v3.0.0 (*)
+    │   ├── solana-rent v3.1.0 (*)
+    │   ├── solana-sbpf v0.13.1
+    │   ├── solana-sdk-ids v3.1.0 (*)
+    │   ├── solana-slot-hashes v3.0.0 (*)
+    │   ├── solana-stable-layout v3.0.0 (*)
+    │   ├── solana-stake-interface v2.0.2
+    │   │   ├── solana-clock v3.0.0 (*)
+    │   │   ├── solana-cpi v3.1.0 (*)
+    │   │   ├── solana-instruction v3.1.0 (*)
+    │   │   ├── solana-program-error v3.0.0 (*)
+    │   │   ├── solana-pubkey v3.0.0 (*)
+    │   │   ├── solana-system-interface v2.0.0 (*)
+    │   │   ├── solana-sysvar v3.1.1 (*)
+    │   │   └── solana-sysvar-id v3.1.0 (*)
+    │   ├── solana-svm-callback v3.1.8
+    │   │   ├── solana-account v3.4.0 (*)
+    │   │   ├── solana-clock v3.0.0 (*)
+    │   │   ├── solana-precompile-error v3.0.0
+    │   │   └── solana-pubkey v3.0.0 (*)
+    │   ├── solana-svm-feature-set v3.1.8
+    │   ├── solana-svm-log-collector v3.1.8
+    │   ├── solana-svm-measure v3.1.8
+    │   ├── solana-svm-timings v3.1.8
+    │   │   └── solana-pubkey v3.0.0 (*)
+    │   ├── solana-svm-transaction v3.1.8
+    │   │   ├── solana-hash v3.1.0 (*)
+    │   │   ├── solana-message v3.0.1 (*)
+    │   │   ├── solana-pubkey v3.0.0 (*)
+    │   │   ├── solana-sdk-ids v3.1.0 (*)
+    │   │   ├── solana-signature v3.1.0 (*)
+    │   │   └── solana-transaction v3.0.2 (*)
+    │   ├── solana-svm-type-overrides v3.1.8
+    │   ├── solana-system-interface v2.0.0 (*)
+    │   ├── solana-sysvar v3.1.1 (*)
+    │   ├── solana-sysvar-id v3.1.0 (*)
+    │   ├── solana-transaction-context v3.1.8
+    │   │   ├── solana-account v3.4.0 (*)
+    │   │   ├── solana-instruction v3.1.0 (*)
+    │   │   ├── solana-instructions-sysvar v3.0.0 (*)
+    │   │   ├── solana-pubkey v3.0.0 (*)
+    │   │   ├── solana-rent v3.1.0 (*)
+    │   │   ├── solana-sbpf v0.13.1 (*)
+    │   │   └── solana-sdk-ids v3.1.0 (*)
+    ├── solana-pubkey v3.0.0 (*)
+    ├── solana-sdk-ids v3.1.0 (*)
+    ├── solana-svm-log-collector v3.1.8 (*)
+    ├── solana-svm-type-overrides v3.1.8 (*)
+    ├── solana-system-interface v2.0.0 (*)
+    ├── solana-sysvar v3.1.1 (*)
+    └── solana-transaction-context v3.1.8 (*)
+│   │   ├── solana-epoch-schedule v3.0.0 (*)
+│   │   ├── solana-hash v3.1.0 (*)
+│   │   ├── solana-pubkey v3.0.0 (*)
+│   │   ├── solana-sha256-hasher v3.1.0 (*)
+│   │   └── solana-svm-feature-set v3.1.8
+│   │   ├── solana-pubkey v3.0.0 (*)
+│   │   └── solana-sdk-ids v3.1.0 (*)
+│   │   ├── solana-account v3.4.0 (*)
+│   │   ├── solana-account-info v3.1.0 (*)
+│   │   ├── solana-big-mod-exp v3.0.0 (*)
+│   │   ├── solana-blake3-hasher v3.1.0 (*)
+│   │   ├── solana-bn254 v3.2.1
+│   │   ├── solana-clock v3.0.0 (*)
+│   │   ├── solana-cpi v3.1.0 (*)
+│   │   ├── solana-curve25519 v3.1.8
+│   │   ├── solana-hash v3.1.0 (*)
+│   │   ├── solana-instruction v3.1.0 (*)
+│   │   ├── solana-keccak-hasher v3.1.0 (*)
+│   │   ├── solana-loader-v3-interface v6.1.0 (*)
+│   │   ├── solana-poseidon v3.1.8
+│   │   ├── solana-program-entrypoint v3.1.1 (*)
+│   │   ├── solana-program-runtime v3.1.8 (*)
+│   │   ├── solana-pubkey v3.0.0 (*)
+│   │   ├── solana-sbpf v0.13.1 (*)
+│   │   ├── solana-sdk-ids v3.1.0 (*)
+│   │   ├── solana-secp256k1-recover v3.1.0 (*)
+│   │   ├── solana-sha256-hasher v3.1.0 (*)
+│   │   ├── solana-stable-layout v3.0.0 (*)
+│   │   ├── solana-stake-interface v2.0.2 (*)
+│   │   ├── solana-svm-callback v3.1.8 (*)
+│   │   ├── solana-svm-feature-set v3.1.8
+│   │   ├── solana-svm-log-collector v3.1.8 (*)
+│   │   ├── solana-svm-measure v3.1.8
+│   │   ├── solana-svm-timings v3.1.8 (*)
+│   │   ├── solana-svm-type-overrides v3.1.8 (*)
+│   │   ├── solana-sysvar v3.1.1 (*)
+│   │   ├── solana-sysvar-id v3.1.0 (*)
+│   │   ├── solana-transaction-context v3.1.8 (*)
+│   ├── solana-account v3.4.0 (*)
+│   ├── solana-address v2.1.0 (*)
+│   ├── solana-address-lookup-table-interface v3.0.1 (*)
+│   ├── solana-bpf-loader-program v3.1.8
+│   │   ├── solana-account v3.4.0 (*)
+│   │   ├── solana-bincode v3.1.0 (*)
+│   │   ├── solana-clock v3.0.0 (*)
+│   │   ├── solana-instruction v3.1.0 (*)
+│   │   ├── solana-loader-v3-interface v6.1.0 (*)
+│   │   ├── solana-loader-v4-interface v3.1.0
+│   │   │   ├── solana-instruction v3.1.0 (*)
+│   │   │   ├── solana-pubkey v3.0.0 (*)
+│   │   │   ├── solana-sdk-ids v3.1.0 (*)
+│   │   │   └── solana-system-interface v2.0.0 (*)
+│   │   ├── solana-packet v3.0.0 (*)
+│   │   ├── solana-program-entrypoint v3.1.1 (*)
+│   │   ├── solana-program-runtime v3.1.8 (*)
+│   │   ├── solana-pubkey v3.0.0 (*)
+│   │   ├── solana-sbpf v0.13.1 (*)
+│   │   ├── solana-sdk-ids v3.1.0 (*)
+│   │   ├── solana-svm-feature-set v3.1.8
+│   │   ├── solana-svm-log-collector v3.1.8 (*)
+│   │   ├── solana-svm-measure v3.1.8
+│   │   ├── solana-svm-type-overrides v3.1.8 (*)
+│   │   ├── solana-system-interface v2.0.0 (*)
+│   │   └── solana-transaction-context v3.1.8 (*)
+│   ├── solana-builtins v3.1.8
+│   │   ├── solana-bpf-loader-program v3.1.8 (*)
+│   │   ├── solana-compute-budget-program v3.1.8
+│   │   │   └── solana-program-runtime v3.1.8 (*)
+│   │   ├── solana-hash v3.1.0 (*)
+│   │   ├── solana-loader-v4-program v3.1.8
+│   │   │   ├── solana-account v3.4.0 (*)
+│   │   │   ├── solana-bincode v3.1.0 (*)
+│   │   │   ├── solana-bpf-loader-program v3.1.8 (*)
+│   │   │   ├── solana-instruction v3.1.0 (*)
+│   │   │   ├── solana-loader-v3-interface v6.1.0 (*)
+│   │   │   ├── solana-loader-v4-interface v3.1.0 (*)
+│   │   │   ├── solana-packet v3.0.0 (*)
+│   │   │   ├── solana-program-runtime v3.1.8 (*)
+│   │   │   ├── solana-pubkey v3.0.0 (*)
+│   │   │   ├── solana-sbpf v0.13.1 (*)
+│   │   │   ├── solana-sdk-ids v3.1.0 (*)
+│   │   │   ├── solana-svm-log-collector v3.1.8 (*)
+│   │   │   ├── solana-svm-measure v3.1.8
+│   │   │   ├── solana-svm-type-overrides v3.1.8 (*)
+│   │   │   └── solana-transaction-context v3.1.8 (*)
+│   │   ├── solana-program-runtime v3.1.8 (*)
+│   │   ├── solana-pubkey v3.0.0 (*)
+│   │   ├── solana-sdk-ids v3.1.0 (*)
+│   │   ├── solana-system-program v3.1.8 (*)
+│   │   ├── solana-vote-program v3.1.8
+│   │   │   ├── solana-account v3.4.0 (*)
+│   │   │   ├── solana-bincode v3.1.0 (*)
+│   │   │   ├── solana-clock v3.0.0 (*)
+│   │   │   ├── solana-epoch-schedule v3.0.0 (*)
+│   │   │   ├── solana-hash v3.1.0 (*)
+│   │   │   ├── solana-instruction v3.1.0 (*)
+│   │   │   ├── solana-keypair v3.1.0 (*)
+│   │   │   ├── solana-packet v3.0.0 (*)
+│   │   │   ├── solana-program-runtime v3.1.8 (*)
+│   │   │   ├── solana-pubkey v3.0.0 (*)
+│   │   │   ├── solana-rent v3.1.0 (*)
+│   │   │   ├── solana-sdk-ids v3.1.0 (*)
+│   │   │   ├── solana-signer v3.0.0 (*)
+│   │   │   ├── solana-slot-hashes v3.0.0 (*)
+│   │   │   ├── solana-transaction v3.0.2 (*)
+│   │   │   ├── solana-transaction-context v3.1.8 (*)
+│   │   │   ├── solana-vote-interface v4.0.4
+│   │   │   │   ├── solana-clock v3.0.0 (*)
+│   │   │   │   ├── solana-hash v3.1.0 (*)
+│   │   │   │   ├── solana-instruction v3.1.0 (*)
+│   │   │   │   ├── solana-instruction-error v2.1.0 (*)
+│   │   │   │   ├── solana-pubkey v3.0.0 (*)
+│   │   │   │   ├── solana-rent v3.1.0 (*)
+│   │   │   │   ├── solana-sdk-ids v3.1.0 (*)
+│   │   │   │   ├── solana-serde-varint v3.0.0 (*)
+│   │   │   │   ├── solana-serialize-utils v3.1.0 (*)
+│   │   │   │   ├── solana-short-vec v3.2.0 (*)
+│   │   │   │   └── solana-system-interface v2.0.0 (*)
+│   │   ├── solana-zk-elgamal-proof-program v3.1.8
+│   │   │   ├── solana-instruction v3.1.0 (*)
+│   │   │   ├── solana-program-runtime v3.1.8 (*)
+│   │   │   ├── solana-sdk-ids v3.1.0 (*)
+│   │   │   ├── solana-svm-log-collector v3.1.8 (*)
+│   │   │   └── solana-zk-sdk v4.0.0
+│   │   │       ├── solana-derivation-path v3.0.0 (*)
+│   │   │       ├── solana-instruction v3.1.0 (*)
+│   │   │       ├── solana-pubkey v3.0.0 (*)
+│   │   │       ├── solana-sdk-ids v3.1.0 (*)
+│   │   │       ├── solana-seed-derivable v3.0.0 (*)
+│   │   │       ├── solana-seed-phrase v3.0.0 (*)
+│   │   │       ├── solana-signature v3.1.0 (*)
+│   │   │       ├── solana-signer v3.0.0 (*)
+│   │   └── solana-zk-token-proof-program v3.1.8
+│   │       ├── solana-instruction v3.1.0 (*)
+│   │       ├── solana-program-runtime v3.1.8 (*)
+│   │       ├── solana-sdk-ids v3.1.0 (*)
+│   │       ├── solana-svm-log-collector v3.1.8 (*)
+│   │       └── solana-zk-token-sdk v3.1.8
+│   │           ├── solana-curve25519 v3.1.8 (*)
+│   │           ├── solana-derivation-path v3.0.0 (*)
+│   │           ├── solana-instruction v3.1.0 (*)
+│   │           ├── solana-pubkey v3.0.0 (*)
+│   │           ├── solana-sdk-ids v3.1.0 (*)
+│   │           ├── solana-seed-derivable v3.0.0 (*)
+│   │           ├── solana-seed-phrase v3.0.0 (*)
+│   │           ├── solana-signature v3.1.0 (*)
+│   │           ├── solana-signer v3.0.0 (*)
+│   ├── solana-clock v3.0.0 (*)
+│   ├── solana-compute-budget v3.1.8
+│   │   ├── solana-fee-structure v3.0.0 (*)
+│   │   └── solana-program-runtime v3.1.8 (*)
+│   ├── solana-compute-budget-instruction v3.1.8
+│   │   ├── solana-borsh v3.0.0 (*)
+│   │   ├── solana-builtins-default-costs v3.1.8
+│   │   │   ├── solana-bpf-loader-program v3.1.8 (*)
+│   │   │   ├── solana-compute-budget-program v3.1.8 (*)
+│   │   │   ├── solana-loader-v4-program v3.1.8 (*)
+│   │   │   ├── solana-pubkey v3.0.0 (*)
+│   │   │   ├── solana-sdk-ids v3.1.0 (*)
+│   │   │   ├── solana-system-program v3.1.8 (*)
+│   │   │   └── solana-vote-program v3.1.8 (*)
+│   │   ├── solana-compute-budget v3.1.8 (*)
+│   │   ├── solana-compute-budget-interface v3.0.0
+│   │   │   ├── solana-instruction v3.1.0 (*)
+│   │   │   └── solana-sdk-ids v3.1.0 (*)
+│   │   ├── solana-instruction v3.1.0 (*)
+│   │   ├── solana-packet v3.0.0 (*)
+│   │   ├── solana-pubkey v3.0.0 (*)
+│   │   ├── solana-sdk-ids v3.1.0 (*)
+│   │   ├── solana-svm-transaction v3.1.8 (*)
+│   │   ├── solana-transaction-error v3.0.0 (*)
+│   ├── solana-epoch-rewards v3.0.0 (*)
+│   ├── solana-epoch-schedule v3.0.0 (*)
+│   ├── solana-fee v3.1.8
+│   │   ├── solana-fee-structure v3.0.0 (*)
+│   │   └── solana-svm-transaction v3.1.8 (*)
+│   ├── solana-fee-structure v3.0.0 (*)
+│   ├── solana-hash v4.1.0 (*)
+│   ├── solana-instruction v3.1.0 (*)
+│   ├── solana-instructions-sysvar v3.0.0 (*)
+│   ├── solana-keypair v3.1.0 (*)
+│   ├── solana-last-restart-slot v3.0.0 (*)
+│   ├── solana-loader-v3-interface v6.1.0 (*)
+│   ├── solana-loader-v4-interface v3.1.0 (*)
+│   ├── solana-message v3.0.1 (*)
+│   ├── solana-native-token v3.0.0
+│   ├── solana-nonce v3.0.0 (*)
+│   ├── solana-nonce-account v3.0.0 (*)
+│   ├── solana-precompile-error v3.0.0 (*)
+│   ├── solana-program-error v3.0.0 (*)
+│   ├── solana-program-runtime v3.1.8 (*)
+│   ├── solana-rent v3.1.0 (*)
+│   ├── solana-sdk-ids v3.1.0 (*)
+│   ├── solana-sha256-hasher v3.1.0 (*)
+│   ├── solana-signature v3.1.0 (*)
+│   ├── solana-signer v3.0.0 (*)
+│   ├── solana-slot-hashes v3.0.0 (*)
+│   ├── solana-slot-history v3.0.0 (*)
+│   ├── solana-stake-interface v2.0.2 (*)
+│   ├── solana-svm-callback v3.1.8 (*)
+│   ├── solana-svm-log-collector v3.1.8 (*)
+│   ├── solana-svm-timings v3.1.8 (*)
+│   ├── solana-svm-transaction v3.1.8 (*)
+│   ├── solana-system-interface v3.0.0
+│   │   ├── solana-address v2.1.0 (*)
+│   │   ├── solana-instruction v3.1.0 (*)
+│   │   ├── solana-msg v3.0.0
+│   │   └── solana-program-error v3.0.0 (*)
+│   ├── solana-system-program v3.1.8 (*)
+│   ├── solana-sysvar v3.1.1 (*)
+│   ├── solana-sysvar-id v3.1.0 (*)
+│   ├── solana-transaction v3.0.2 (*)
+│   ├── solana-transaction-context v3.1.8 (*)
+│   ├── solana-transaction-error v3.0.0 (*)
+├── solana-client v3.1.8
+│   ├── solana-account v3.4.0 (*)
+│   ├── solana-client-traits v3.0.0
+│   │   ├── solana-account v3.4.0 (*)
+│   │   ├── solana-commitment-config v3.1.0
+│   │   ├── solana-epoch-info v3.1.0 (*)
+│   │   ├── solana-hash v3.1.0 (*)
+│   │   ├── solana-instruction v3.1.0 (*)
+│   │   ├── solana-keypair v3.1.0 (*)
+│   │   ├── solana-message v3.0.1 (*)
+│   │   ├── solana-pubkey v3.0.0 (*)
+│   │   ├── solana-signature v3.1.0 (*)
+│   │   ├── solana-signer v3.0.0 (*)
+│   │   ├── solana-system-interface v2.0.0 (*)
+│   │   ├── solana-transaction v3.0.2 (*)
+│   │   └── solana-transaction-error v3.0.0 (*)
+│   ├── solana-commitment-config v3.1.0 (*)
+│   ├── solana-connection-cache v3.1.8
+│   │   ├── solana-keypair v3.1.0 (*)
+│   │   ├── solana-measure v3.1.8
+│   │   ├── solana-metrics v3.1.8
+│   │   │   ├── solana-cluster-type v3.0.0
+│   │   │   │   └── solana-hash v3.1.0 (*)
+│   │   │   ├── solana-sha256-hasher v3.1.0 (*)
+│   │   │   ├── solana-time-utils v3.0.0
+│   │   ├── solana-time-utils v3.0.0
+│   │   ├── solana-transaction-error v3.0.0 (*)
+│   ├── solana-epoch-info v3.1.0 (*)
+│   ├── solana-hash v3.1.0 (*)
+│   ├── solana-instruction v3.1.0 (*)
+│   ├── solana-keypair v3.1.0 (*)
+│   ├── solana-measure v3.1.8
+│   ├── solana-message v3.0.1 (*)
+│   ├── solana-net-utils v3.1.8
+│   │   ├── solana-serde v3.0.0 (*)
+│   │   ├── solana-svm-type-overrides v3.1.8 (*)
+│   ├── solana-pubkey v3.0.0 (*)
+│   ├── solana-pubsub-client v3.1.8
+│   │   ├── solana-account-decoder-client-types v3.1.8
+│   │   │   ├── solana-account v3.4.0 (*)
+│   │   │   ├── solana-pubkey v3.0.0 (*)
+│   │   ├── solana-clock v3.0.0 (*)
+│   │   ├── solana-pubkey v3.0.0 (*)
+│   │   ├── solana-rpc-client-types v3.1.8
+│   │   │   ├── solana-account v3.4.0 (*)
+│   │   │   ├── solana-account-decoder-client-types v3.1.8 (*)
+│   │   │   ├── solana-address v1.1.0 (*)
+│   │   │   ├── solana-clock v3.0.0 (*)
+│   │   │   ├── solana-commitment-config v3.1.0 (*)
+│   │   │   ├── solana-fee-calculator v3.0.0 (*)
+│   │   │   ├── solana-inflation v3.0.0 (*)
+│   │   │   ├── solana-reward-info v3.0.0
+│   │   │   ├── solana-transaction v3.0.2 (*)
+│   │   │   ├── solana-transaction-error v3.0.0 (*)
+│   │   │   ├── solana-transaction-status-client-types v3.1.8
+│   │   │   │   ├── solana-account-decoder-client-types v3.1.8 (*)
+│   │   │   │   ├── solana-commitment-config v3.1.0 (*)
+│   │   │   │   ├── solana-instruction v3.1.0 (*)
+│   │   │   │   ├── solana-message v3.0.1 (*)
+│   │   │   │   ├── solana-pubkey v3.0.0 (*)
+│   │   │   │   ├── solana-reward-info v3.0.0 (*)
+│   │   │   │   ├── solana-signature v3.1.0 (*)
+│   │   │   │   ├── solana-transaction v3.0.2 (*)
+│   │   │   │   ├── solana-transaction-context v3.1.8 (*)
+│   │   │   │   ├── solana-transaction-error v3.0.0 (*)
+│   │   │   ├── solana-version v3.1.8
+│   │   │   │   ├── solana-sanitize v3.0.1
+│   │   │   │   └── solana-serde-varint v3.0.0 (*)
+│   │   │   │   └── solana-pubkey v3.0.0 (*)
+│   │   ├── solana-signature v3.1.0 (*)
+│   ├── solana-quic-client v3.1.8
+│   │   ├── solana-connection-cache v3.1.8 (*)
+│   │   ├── solana-keypair v3.1.0 (*)
+│   │   ├── solana-measure v3.1.8
+│   │   ├── solana-metrics v3.1.8 (*)
+│   │   ├── solana-net-utils v3.1.8 (*)
+│   │   ├── solana-pubkey v3.0.0 (*)
+│   │   ├── solana-quic-definitions v3.0.0
+│   │   │   └── solana-keypair v3.1.0 (*)
+│   │   ├── solana-rpc-client-api v3.1.8
+│   │   │   ├── solana-account-decoder-client-types v3.1.8 (*)
+│   │   │   ├── solana-clock v3.0.0 (*)
+│   │   │   ├── solana-rpc-client-types v3.1.8 (*)
+│   │   │   ├── solana-signer v3.0.0 (*)
+│   │   │   ├── solana-transaction-error v3.0.0 (*)
+│   │   │   ├── solana-transaction-status-client-types v3.1.8 (*)
+│   │   ├── solana-signer v3.0.0 (*)
+│   │   ├── solana-streamer v3.1.8
+│   │   │   ├── solana-keypair v3.1.0 (*)
+│   │   │   ├── solana-measure v3.1.8
+│   │   │   ├── solana-metrics v3.1.8 (*)
+│   │   │   ├── solana-net-utils v3.1.8 (*)
+│   │   │   ├── solana-packet v3.0.0 (*)
+│   │   │   ├── solana-perf v3.1.8
+│   │   │   │   ├── solana-hash v3.1.0 (*)
+│   │   │   │   ├── solana-message v3.0.1 (*)
+│   │   │   │   ├── solana-metrics v3.1.8 (*)
+│   │   │   │   ├── solana-packet v3.0.0 (*)
+│   │   │   │   ├── solana-pubkey v3.0.0 (*)
+│   │   │   │   ├── solana-rayon-threadlimit v3.1.8
+│   │   │   │   ├── solana-sdk-ids v3.1.0 (*)
+│   │   │   │   ├── solana-short-vec v3.2.0 (*)
+│   │   │   │   ├── solana-signature v3.1.0 (*)
+│   │   │   │   ├── solana-time-utils v3.0.0
+│   │   │   │   └── solana-transaction-context v3.1.8 (*)
+│   │   │   ├── solana-pubkey v3.0.0 (*)
+│   │   │   ├── solana-quic-definitions v3.0.0 (*)
+│   │   │   ├── solana-signature v3.1.0 (*)
+│   │   │   ├── solana-signer v3.0.0 (*)
+│   │   │   ├── solana-time-utils v3.0.0
+│   │   │   ├── solana-tls-utils v3.1.8
+│   │   │   │   ├── solana-keypair v3.1.0 (*)
+│   │   │   │   ├── solana-pubkey v3.0.0 (*)
+│   │   │   │   ├── solana-signer v3.0.0 (*)
+│   │   │   ├── solana-transaction-error v3.0.0 (*)
+│   │   │   ├── solana-transaction-metrics-tracker v3.1.8
+│   │   │   │   ├── solana-packet v3.0.0 (*)
+│   │   │   │   ├── solana-perf v3.1.8 (*)
+│   │   │   │   ├── solana-short-vec v3.2.0 (*)
+│   │   │   │   └── solana-signature v3.1.0 (*)
+│   │   ├── solana-tls-utils v3.1.8 (*)
+│   │   ├── solana-transaction-error v3.0.0 (*)
+│   ├── solana-quic-definitions v3.0.0 (*)
+│   ├── solana-rpc-client v3.1.8
+│   │   ├── solana-account v3.4.0 (*)
+│   │   ├── solana-account-decoder v3.1.8
+│   │   │   ├── solana-account v3.4.0 (*)
+│   │   │   ├── solana-account-decoder-client-types v3.1.8 (*)
+│   │   │   ├── solana-address-lookup-table-interface v3.0.1 (*)
+│   │   │   ├── solana-clock v3.0.0 (*)
+│   │   │   ├── solana-config-interface v2.0.0
+│   │   │   │   ├── solana-account v3.4.0 (*)
+│   │   │   │   ├── solana-instruction v3.1.0 (*)
+│   │   │   │   ├── solana-pubkey v3.0.0 (*)
+│   │   │   │   ├── solana-sdk-ids v3.1.0 (*)
+│   │   │   │   ├── solana-short-vec v3.2.0 (*)
+│   │   │   │   └── solana-system-interface v2.0.0 (*)
+│   │   │   ├── solana-epoch-schedule v3.0.0 (*)
+│   │   │   ├── solana-fee-calculator v3.0.0 (*)
+│   │   │   ├── solana-instruction v3.1.0 (*)
+│   │   │   ├── solana-loader-v3-interface v6.1.0 (*)
+│   │   │   ├── solana-nonce v3.0.0 (*)
+│   │   │   ├── solana-program-option v3.0.0
+│   │   │   ├── solana-program-pack v3.0.0 (*)
+│   │   │   ├── solana-pubkey v3.0.0 (*)
+│   │   │   ├── solana-rent v3.1.0 (*)
+│   │   │   ├── solana-sdk-ids v3.1.0 (*)
+│   │   │   ├── solana-slot-hashes v3.0.0 (*)
+│   │   │   ├── solana-slot-history v3.0.0 (*)
+│   │   │   ├── solana-stake-interface v2.0.2 (*)
+│   │   │   ├── solana-sysvar v3.1.1 (*)
+│   │   │   ├── solana-vote-interface v4.0.4 (*)
+│   │   │   │   ├── solana-account-info v3.1.0 (*)
+│   │   │   │   ├── solana-instruction v3.1.0 (*)
+│   │   │   │   ├── solana-program-error v3.0.0 (*)
+│   │   │   │   ├── solana-program-option v3.0.0
+│   │   │   │   ├── solana-program-pack v3.0.0 (*)
+│   │   │   │   ├── solana-pubkey v3.0.0 (*)
+│   │   │   │   ├── solana-sdk-ids v3.1.0 (*)
+│   │   │   │   ├── solana-zk-sdk v4.0.0 (*)
+│   │   │   │   │   ├── solana-program-error v3.0.0 (*)
+│   │   │   │   │   ├── solana-program-option v3.0.0
+│   │   │   │   │   ├── solana-pubkey v3.0.0 (*)
+│   │   │   │   │   ├── solana-zk-sdk v4.0.0 (*)
+│   │   │   │   │   ├── solana-account-info v3.1.0 (*)
+│   │   │   │   │   ├── solana-curve25519 v3.1.8 (*)
+│   │   │   │   │   ├── solana-instruction v3.1.0 (*)
+│   │   │   │   │   ├── solana-instructions-sysvar v3.0.0 (*)
+│   │   │   │   │   ├── solana-msg v3.0.0
+│   │   │   │   │   ├── solana-program-error v3.0.0 (*)
+│   │   │   │   │   ├── solana-pubkey v3.0.0 (*)
+│   │   │   │   │   ├── solana-sdk-ids v3.1.0 (*)
+│   │   │   │   │   ├── solana-zk-sdk v4.0.0 (*)
+│   │   │   │   │   ├── solana-zk-sdk v4.0.0 (*)
+│   │   │   │   │   ├── solana-instruction v3.1.0 (*)
+│   │   │   │   │   ├── solana-program-error v3.0.0 (*)
+│   │   │   │   │   ├── solana-pubkey v3.0.0 (*)
+│   │   │   │   │   │   ├── solana-program-error v3.0.0 (*)
+│   │   │   │   │   │   ├── solana-sha256-hasher v3.1.0 (*)
+│   │   │   │   │   ├── solana-borsh v3.0.0 (*)
+│   │   │   │   │   ├── solana-instruction v3.1.0 (*)
+│   │   │   │   │   ├── solana-program-error v3.0.0 (*)
+│   │   │   │   │   ├── solana-pubkey v3.0.0 (*)
+│   │   │   │   │   │   ├── solana-account-info v3.1.0 (*)
+│   │   │   │   │   │   ├── solana-msg v3.0.0
+│   │   │   │   │   │   ├── solana-program-error v3.0.0 (*)
+│   │   │   │   ├── solana-instruction v3.1.0 (*)
+│   │   │   │   ├── solana-program-error v3.0.0 (*)
+│   │   │   │   ├── solana-program-option v3.0.0
+│   │   │   │   ├── solana-program-pack v3.0.0 (*)
+│   │   │   │   ├── solana-pubkey v3.0.0 (*)
+│   │   │   │   ├── solana-sdk-ids v3.1.0 (*)
+│   │   ├── solana-account-decoder-client-types v3.1.8 (*)
+│   │   ├── solana-clock v3.0.0 (*)
+│   │   ├── solana-commitment-config v3.1.0 (*)
+│   │   ├── solana-epoch-info v3.1.0 (*)
+│   │   ├── solana-epoch-schedule v3.0.0 (*)
+│   │   ├── solana-feature-gate-interface v3.1.0
+│   │   │   ├── solana-program-error v3.0.0 (*)
+│   │   │   ├── solana-pubkey v4.0.0 (*)
+│   │   │   └── solana-sdk-ids v3.1.0 (*)
+│   │   ├── solana-hash v3.1.0 (*)
+│   │   ├── solana-instruction v3.1.0 (*)
+│   │   ├── solana-message v3.0.1 (*)
+│   │   ├── solana-pubkey v3.0.0 (*)
+│   │   ├── solana-rpc-client-api v3.1.8 (*)
+│   │   ├── solana-signature v3.1.0 (*)
+│   │   ├── solana-transaction v3.0.2 (*)
+│   │   ├── solana-transaction-error v3.0.0 (*)
+│   │   ├── solana-transaction-status-client-types v3.1.8 (*)
+│   │   ├── solana-version v3.1.8 (*)
+│   │   ├── solana-vote-interface v4.0.4 (*)
+│   ├── solana-rpc-client-api v3.1.8 (*)
+│   ├── solana-rpc-client-nonce-utils v3.1.8
+│   │   ├── solana-account v3.4.0 (*)
+│   │   ├── solana-commitment-config v3.1.0 (*)
+│   │   ├── solana-hash v3.1.0 (*)
+│   │   ├── solana-message v3.0.1 (*)
+│   │   ├── solana-nonce v3.0.0 (*)
+│   │   ├── solana-pubkey v3.0.0 (*)
+│   │   ├── solana-rpc-client v3.1.8 (*)
+│   │   ├── solana-sdk-ids v3.1.0 (*)
+│   ├── solana-signature v3.1.0 (*)
+│   ├── solana-signer v3.0.0 (*)
+│   ├── solana-streamer v3.1.8 (*)
+│   ├── solana-time-utils v3.0.0
+│   ├── solana-tpu-client v3.1.8
+│   │   ├── solana-client-traits v3.0.0 (*)
+│   │   ├── solana-clock v3.0.0 (*)
+│   │   ├── solana-commitment-config v3.1.0 (*)
+│   │   ├── solana-connection-cache v3.1.8 (*)
+│   │   ├── solana-epoch-schedule v3.0.0 (*)
+│   │   ├── solana-measure v3.1.8
+│   │   ├── solana-message v3.0.1 (*)
+│   │   ├── solana-net-utils v3.1.8 (*)
+│   │   ├── solana-pubkey v3.0.0 (*)
+│   │   ├── solana-pubsub-client v3.1.8 (*)
+│   │   ├── solana-quic-definitions v3.0.0 (*)
+│   │   ├── solana-rpc-client v3.1.8 (*)
+│   │   ├── solana-rpc-client-api v3.1.8 (*)
+│   │   ├── solana-signature v3.1.0 (*)
+│   │   ├── solana-signer v3.0.0 (*)
+│   │   ├── solana-transaction v3.0.2 (*)
+│   │   ├── solana-transaction-error v3.0.0 (*)
+│   ├── solana-transaction v3.0.2 (*)
+│   ├── solana-transaction-error v3.0.0 (*)
+│   ├── solana-transaction-status-client-types v3.1.8 (*)
+│   ├── solana-udp-client v3.1.8
+│   │   ├── solana-connection-cache v3.1.8 (*)
+│   │   ├── solana-keypair v3.1.0 (*)
+│   │   ├── solana-net-utils v3.1.8 (*)
+│   │   ├── solana-streamer v3.1.8 (*)
+│   │   ├── solana-transaction-error v3.0.0 (*)

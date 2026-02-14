@@ -1,0 +1,151 @@
+use pinocchio::{
+    AccountView, ProgramResult,
+    cpi::{Seed, Signer},
+    error::ProgramError,
+};
+use pinocchio_system::instructions::Transfer;
+use solana_program_log::log;
+pub struct VaultContext<'info> {
+    pub owner: &'info AccountView,
+    vault: &'info AccountView,
+
+    lamports: u64,
+    bump: u8,
+}
+
+impl<'info> TryFrom<(&'info [AccountView], &'info [u8], u8)> for VaultContext<'info> {
+    type Error = ProgramError;
+
+    fn try_from(
+        (accounts, instruction_data, discriminator): (&'info [AccountView], &'info [u8], u8),
+    ) -> Result<Self, Self::Error> {
+        // let [owner, vault] = accounts else {
+        //     return Err(ProgramError::NotEnoughAccountKeys);
+        // };
+
+        log(&format!("Received {} accounts", accounts.len()));
+
+        // 至少需要 2 个账户：owner + vault
+        if accounts.len() < 2 {
+            log("Insufficient accounts");
+            return Err(ProgramError::NotEnoughAccountKeys);
+        }
+
+        let owner = &accounts[0];
+        let vault = &accounts[1];
+
+        // check owner is signer
+        if !owner.is_signer() {
+            return Err(ProgramError::MissingRequiredSignature);
+        }
+
+        // check vault belongs to System Program
+        if !vault.owned_by(&pinocchio_system::id()) {
+            return Err(ProgramError::IncorrectProgramId);
+        }
+
+        let (vault_address, bump_seed) = solana_program::pubkey::Pubkey::find_program_address(
+            &[b"vault", owner.address().as_ref()],
+            &crate::id(), // crate::id() refers to the current program's ID
+        );
+
+        if vault_address.ne(vault.address()) {
+            return Err(ProgramError::InvalidAccountData);
+        }
+
+        // check instruction data length,  这个也有限制的？  3 !=8
+        // if accounts.len() != core::mem::size_of::<u64>() {
+        //     return Err(ProgramError::InvalidInstructionData);
+        // }
+        log(&format!(
+            "core::mem::size_of::<u64>() 值为 {} ",
+            core::mem::size_of::<u64>()
+        ));
+
+        log(&format!(
+            "instruction_data.len() => {}",
+            instruction_data.len()
+        ));
+
+        let is_deposit = discriminator == 0;
+
+        let mut amount = 0u64;
+
+        if is_deposit {
+            if instruction_data.len() < 8 {
+                return Err(ProgramError::InvalidInstructionData);
+            }
+
+            amount = u64::from_le_bytes(
+                instruction_data
+                    .try_into()
+                    .map_err(|_| ProgramError::InvalidInstructionData)?,
+            );
+
+            log(&format!("amount is {}", amount));
+            // check amount is positive,有可能   取款时要为负的
+            if amount.eq(&0) {
+                log("Amount should greate than 0");
+                return Err(ProgramError::InvalidArgument);
+            }
+        }
+        Ok(VaultContext {
+            owner,
+            vault,
+            lamports: amount,
+            bump: bump_seed,
+        })
+    }
+}
+
+impl<'info> VaultContext<'info> {
+    pub fn deposit(&self) -> ProgramResult {
+        // let [owner, vault] = account else {
+        //     return Err(ProgramError::NotEnoughAccountKeys);
+        // };
+
+        // let amount = u64::from_le_bytes(instruction_data.try_into().unwrap());
+
+        log(" Deposit instruction processed ");
+
+        Transfer {
+            from: self.owner,
+            to: self.vault,
+            lamports: self.lamports,
+        }
+        .invoke()
+        // let amount = instruction_data
+        //     .get(1..9)
+        //     .and_then(|slice| slice.try_into().ok())
+        //     .map(u64::from_le_bytes)
+        //     .expect("Failed to parse amount from instruction data");
+    }
+
+    pub fn withdraw(&self) -> ProgramResult {
+        log(" withdraw instruction processed ");
+
+        let bump = [self.bump];
+        let seeds = [
+            Seed::from(b"vault"),
+            Seed::from(self.owner.address().as_ref()),
+            Seed::from(bump.as_ref()),
+        ];
+
+        let signers = [Signer::from(&seeds)];
+
+        let lamports = self.vault.lamports(); // 取全部
+
+        if lamports == 0 {
+            log("Vault is empty");
+            return Err(ProgramError::InvalidArgument);
+        }
+
+        Transfer {
+            from: self.vault,
+            to: self.owner,
+
+            lamports,
+        }
+        .invoke_signed(&signers)
+    }
+}

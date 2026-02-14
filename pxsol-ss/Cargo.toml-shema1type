@@ -1,0 +1,39 @@
+[package]
+name = "pxsol-ss"
+version = "0.1.0"
+edition = "2024"
+
+[lib]
+## 告诉cargo我们要生成哪几种类型的crate
+# cdylib 表示编译为一个 c 兼容的动态库  ，  
+# Solana 要求合约以 cdylib 形式编译为 .so 文件, 才能部署到链上
+# 这个 .so 文件会通过 cargo build-sbf 生成.
+crate-type = ["cdylib", "lib"]
+
+[dependencies]
+# getrandom = { version = "0.3.4", features = ["custom"] }
+solana-program = "3.0.0"
+
+# 关键配置：getrandom 0.3.x 需要不同的特性
+[dependencies.getrandom]
+version = "0.3"
+default-features = false
+features = []  # 不要加 custom！
+
+# 设置构建时的环境变量
+[package.metadata]
+getrandom_backend = "custom"  # 这是关键！
+
+# 构建时配置
+[build-dependencies]
+getrandom_build = "0.3"
+
+[dev-dependencies]
+litesvm = "0.9.1"
+solana-client = "3.1.8"
+solana-sdk = "3.0.0"
+tokio = "1.49.0"
+
+[[example]]
+name = "client"
+path = "examples/client.rs"

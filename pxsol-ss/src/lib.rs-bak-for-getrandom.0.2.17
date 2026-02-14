@@ -1,0 +1,124 @@
+// 自定义 getrandom 实现
+#[unsafe(no_mangle)]
+pub unsafe extern "C" fn __getrandom_custom(buf: *mut u8, len: usize) -> i32 {
+    use solana_program::clock::Clock;
+    use solana_program::sysvar::Sysvar;
+
+    // 使用 Solana 的时钟作为随机源种子
+    let clock = Clock::get().unwrap();
+    let seed = clock.unix_timestamp as u64;
+
+    // 简单伪随机生成器
+    for i in 0..len {
+        let x = (seed.wrapping_mul(1664525).wrapping_add(1013904223) >> (i * 8)) as u8;
+        *buf.add(i) = x;
+    }
+    0
+}
+// #![cfg_attr(feature = "custom", allow(unused))]
+
+// // 为 getrandom 提供自定义实现
+// #[cfg(feature = "custom")]
+// mod custom_getrandom {
+//     use getrandom::Error;
+
+//     // 实现 getrandom 需要的 C ABI 函数
+//     #[no_mangle]
+//     pub unsafe extern "C" fn __getrandom_custom(dest: *mut u8, size: usize) -> i32 {
+//         // 简单实现：用伪随机数据填充
+//         for i in 0..size {
+//             // 使用简单算法（不安全，仅用于测试）
+//             let byte = (i as u8).wrapping_mul(31);
+//             *dest.add(i) = byte;
+//         }
+//         0 // 成功
+//     }
+
+//         // 注册自定义实现到 getrandom crate
+//         getrandom::register_custom_getrandom!(|buf: &mut [u8]| {
+//             // 这里可以用更好的伪随机源
+//             for (i, byte) in buf.iter_mut().enumerate() {
+//                 *byte = (i as u8).wrapping_mul(31);
+//             }
+//             Ok(())
+//         });
+//     }
+
+use solana_program::{
+    account_info::AccountInfo, entrypoint, entrypoint::ProgramResult, msg, pubkey::Pubkey,
+};
+
+entrypoint!(process_instruction);
+
+pub fn process_instruction(
+    _program_id: &Pubkey,
+    _accounts: &[AccountInfo],
+    _instruction_data: &[u8],
+) -> ProgramResult {
+    msg!("Hello, solana!");
+    msg!(" update from original hello world example");
+    msg!("Generating a random u128 number using getrandom crate...");
+
+    match get_random_u128() {
+        Ok(random_number) => {
+            msg!("Generated random u128 number: {}", random_number);
+        }
+        Err(e) => {
+            msg!("Generated random u128 number error: {}", e);
+        }
+    }
+    Ok(())
+}
+
+fn get_random_u128() -> Result<u128, getrandom::Error> {
+    let mut buf = [0u8; 16];
+    getrandom::getrandom(&mut buf)?;
+    //getrandom::fill(&mut buf)?;
+    Ok(u128::from_le_bytes(buf))
+}
+
+#[cfg(test)]
+mod test {
+    use litesvm::LiteSVM;
+    use solana_sdk::{
+        instruction::Instruction,
+        message::Message,
+        signature::{Keypair, Signer},
+        transaction::Transaction,
+    };
+
+    #[test]
+    fn test_pxsol_ss() {
+        // Create a new LiteSVM instance
+        let mut svm = LiteSVM::new();
+
+        // Create a keypair for the transaction payer
+        let payer = Keypair::new();
+
+        // Airdrop some lamports to the payer
+        svm.airdrop(&payer.pubkey(), 1_000_000_000).unwrap();
+
+        // Load our program
+        let program_keypair = Keypair::new();
+        let program_id = program_keypair.pubkey();
+        svm.add_program_from_file(program_id, "target/deploy/pxsol_ss.so")
+            .unwrap();
+
+        // Create instruction with no accounts and no data
+        let instruction = Instruction {
+            program_id,
+            accounts: vec![],
+            data: vec![],
+        };
+
+        // Create transaction
+        let message = Message::new(&[instruction], Some(&payer.pubkey()));
+        let transaction = Transaction::new(&[&payer], message, svm.latest_blockhash());
+
+        // Send transaction and verify it succeeds
+        let result = svm.send_transaction(transaction);
+        assert!(result.is_ok(), "Transaction should succeed");
+        let logs = result.unwrap().logs;
+        println!("Logs: {logs:#?}");
+    }
+}

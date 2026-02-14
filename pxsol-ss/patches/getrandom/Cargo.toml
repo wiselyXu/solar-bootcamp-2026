@@ -1,0 +1,15 @@
+[package]
+name = "getrandom"
+version = "0.3.4"
+edition = "2021"
+
+[features]
+default = ["custom"]
+custom = []
+js = []
+wasi = []
+wasm_js = []     # 关键：添加 wasm_js 特性
+
+[lib]
+name = "getrandom"
+path = "src/lib.rs"

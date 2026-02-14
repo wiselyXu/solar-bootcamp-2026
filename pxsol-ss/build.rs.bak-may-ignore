@@ -1,0 +1,7 @@
+fn main() {
+    // 告诉 getrandom 使用 custom backend
+    println!("cargo:rustc-cfg=getrandom_backend=\"custom\"");
+
+    // 或者使用环境变量
+    std::env::set_var("CARGO_CFG_GETRANDOM_BACKEND", "custom");
+}
