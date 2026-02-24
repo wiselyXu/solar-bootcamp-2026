@@ -1,12 +1,27 @@
 mod algorithms;
+mod book;
 
 use std::io;
 
 use crate::algorithms::{
-    read_helper::{read_vec, read_vec_i32_bracket}, num::is_narcissistic, sort::{bubble_sort, insert_sort, insertion_sort_ai, move_right, select_sort, select_sort2}, string_op::{reverse_part, reverse_part_2}
+    exam01::{get_combine_ways, get_ports, get_vans},
+    list::{print_list_node, remove_nth_from_end, vec_to_list_node},
+    num::is_narcissistic,
+    read_helper::{read_vec, read_vec_i32_bracket},
+    sort::{bubble_sort, insert_sort, insertion_sort_ai, move_right, select_sort, select_sort2},
+    string_op::{reverse_part, reverse_part_2},
 };
 
 fn main() {
+    test_algorithms();
+    // test_book();
+}
+
+fn test_book() {
+    book::fifteen::test_cons();
+}
+
+fn test_algorithms() {
     // let arr = vec![6, 8, 5, 7, 4];
     // let sorted_arr = bubble_sort(arr, true);
     // println!("after sort {:?}", sorted_arr);
@@ -22,25 +37,52 @@ fn main() {
 
     // println!("after sort {:?}", arr);
     // move_right(1, 3, &mut arr);
-
-   // this_calc_mul();
+    // 大数乘法
+    // this_calc_mul();
     // this_test_reverse_part();
 
-   // this_test_naccisistic();
-   //test_input();
-   // read_vec();
-   read_vec_i32_bracket();
+    // this_test_naccisistic();
+    //test_input();
+    // read_vec();
+    //  read_vec_i32_bracket();
+    // this_list_node_print();
+    // this_exam01();
+    //   this_smart_pointer_test();
+    loop {
+        //get_vans();
+        let result = get_ports();
+        println!("结果为：{:?}", result);
+        // read_vec_i32_bracket(true);
+    }
+}
+
+fn this_smart_pointer_test() {
+    // use std::rc::Rc;
+    // let a = Rc::new(5);
+    // let b = Rc::clone(&a);
+    // println!("a: {}, b: {}", a, b);
+    let b = Box::new(5);
+    let c = b;
+    println!("c: {}", c);
+}
+
+fn this_exam01() {
+    let arr = vec![1, 2, 3, 4, 5];
+    let result = get_combine_ways(arr, 6);
+    println!("{:?}", result)
+}
+
+fn this_list_node_print() {
+    let arr = vec![1, 2, 3, 4, 5, 6, 7];
+    let node_head = vec_to_list_node(arr);
+    let new_head = remove_nth_from_end(node_head, 4);
+    print_list_node(new_head);
 }
 
 fn this_calc_mul() {
-    let mut a: i64 = 32679;
-    let mut b: i64 = 4383;
+    let a: i64 = 32679;
+    let b: i64 = 4383;
     println!(" {} * {} = {} ", a, b, a * b);
-
-
-    a = 843867;
-    b = 2186;
-    println!(" {} * {} = {} ",a,b, a * b);
 }
 
 fn this_test_naccisistic() {
@@ -78,4 +120,3 @@ fn this_test_reverse_part() {
         assert_eq!(result, expected);
     }
 }
-

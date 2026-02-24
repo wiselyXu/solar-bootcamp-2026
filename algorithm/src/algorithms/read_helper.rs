@@ -29,32 +29,36 @@ pub fn read_vec() {
     }
 }
 
-pub fn read_vec_i32_bracket() {
-    while true {
+pub fn read_vec_i32_bracket(need_prompt: bool) -> Vec<i32> {
+    let mut arr: Vec<i32> = Vec::new();
+
+    if need_prompt {
         println!(
-            "请输入 数组元素，用方括号包起  ，元素用逗号分开, 可以不用 方括号， 因为不解析方括号"
+            "输入数组元素， 用逗号分隔， 可以用方括号包起，也可以不用方括号， 因为不解析方括号"
         );
-        let mut line = String::new();
-        io::stdin().read_line(&mut line).unwrap();
-
-        // 只留下数字， 负号， 逗号什么的
-        let cleaned: String = line
-            .trim()
-            .chars()
-            .filter(|&c| c.is_digit(10) || c == ',' || c == '-')
-            .collect();
-
-        if cleaned.is_empty() {
-            println!("输入的为空数组");
-        }
-
-        let arr: Vec<i32> = cleaned
-            .split(',')
-            .filter_map(|s| s.trim().parse::<i32>().ok())
-            .collect();
-
-        println!("你输入的数组为： {:?}", arr);
     }
+    let mut line = String::new();
+    io::stdin().read_line(&mut line).unwrap();
+
+    // 只留下数字， 负号， 逗号什么的
+    let cleaned: String = line
+        .trim()
+        .chars()
+        .filter(|&c| c.is_digit(10) || c == ',' || c == '-')
+        .collect();
+
+    if cleaned.is_empty() {
+        println!("输入的为空数组");
+    }
+
+    arr = cleaned
+        .split(',')
+        .filter_map(|s| s.trim().parse::<i32>().ok())
+        .collect();
+
+    println!("你输入的数组为： {:?}", arr);
+
+    arr
 }
 
 // 接收一字符串
@@ -72,21 +76,35 @@ pub fn read_i32(need_prompt: bool) -> i32 {
     if need_prompt {
         println!("输入一数字，当作输入");
     }
-    
+
     read_line(false).parse().unwrap()
 }
 
 //
-pub fn read_vec_i32() -> Vec<i32> {
+pub fn read_vec_i32(need_prompt: bool) -> Vec<i32> {
+    println!("请输入 数组元素，用空格分开");
+
     io::stdin()
-    .lock()
-    .lines()
-    .next()
-    .unwrap()
-    .unwrap()
-    .split_whitespace()
-    .filter_map(|s| s.parse().ok())
-    .collect()
+        .lock()
+        .lines()
+        .next()
+        .unwrap()
+        .unwrap()
+        .split_whitespace()
+        .filter_map(|s| s.parse().ok())
+        .collect()
 }
 
+pub fn read_vec_string(need_prompt: bool) -> Vec<String> {
+    println!("请输入 数组元素，用空格分开");
 
+    io::stdin()
+        .lock()
+        .lines()
+        .next()
+        .unwrap()
+        .unwrap()
+        .split_whitespace()
+        .filter_map(|s| s.parse().ok())
+        .collect()
+}
