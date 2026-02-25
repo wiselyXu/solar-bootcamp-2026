@@ -1,4 +1,7 @@
 */target/
+*/*/target/
+*/*/*/target/
+
 */.gitignore
 */.git/
 */node_modules/
