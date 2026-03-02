@@ -4,7 +4,7 @@ mod book;
 use std::io;
 
 use crate::{algorithms::{
-    exam01::{get_combine_ways, get_ports, get_vans},
+    exam01::{self, get_combine_ways, get_ports, get_vans},
     list::{print_list_node, remove_nth_from_end, vec_to_list_node},
     num::is_narcissistic,
     read_helper::{read_vec, read_vec_i32_bracket},
@@ -13,7 +13,7 @@ use crate::{algorithms::{
 }, book::fifteen};
 
 fn main() {
-   // test_algorithms();
+    //test_algorithms();
      test_book();
 }
 
@@ -51,9 +51,10 @@ fn test_algorithms() {
     //   this_smart_pointer_test();
     loop {
         //get_vans();
-        let result = get_ports();
-        println!("结果为：{:?}", result);
+        // let result = get_ports();
+        // println!("结果为：{:?}", result);
         // read_vec_i32_bracket(true);
+        exam01::sub_main();
     }
 }
 
