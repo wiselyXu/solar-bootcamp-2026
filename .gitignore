@@ -1,7 +1,9 @@
 */target/
 */*/target/
 */*/*/target/
-
+*/*.lock
+*/*/*.lock
+*/*/*/*.lock
 */.gitignore
 */.git/
 */node_modules/

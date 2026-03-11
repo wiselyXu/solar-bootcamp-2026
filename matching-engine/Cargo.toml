@@ -1,0 +1,18 @@
+[package]
+name = "matching-engine"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+disruptor = "3.7.1"
+env_logger = "0.11.9"
+kafka = "0.10.0"
+log = "0.4.29"
+openraft = "0.9.21"
+rocksdb = "0.24.0"
+rust_decimal = { version = "1.40.0", features = ["borsh"] }
+rust_decimal_macros = "1.40.0"
+serde = { version = "1.0.228", features = ["derive"] }
+tokio = { version = "1.50.0", features = ["full"] }
+
+
