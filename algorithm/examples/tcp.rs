@@ -5,7 +5,8 @@ use std::{
     thread,
     time::Duration,
 };
-mod thread_pool;
+mod features;
+use features::thread_pool;
 use thread_pool::ThreadPool;
 
 fn main() {
@@ -28,14 +29,13 @@ fn test_tcp() {
 
 fn test_thread_pool() {
     let address = "0.0.0.0:7878";
-    let mut listener = TcpListener::bind(address).unwrap();
+    let listener = TcpListener::bind(address).unwrap();
     println!("连接服务器成功，等待连接... 在 {} 上监听", address);
 
     let pool = ThreadPool::new(4);
 
-    for stream in listener.incoming() {
-        let mut stream = stream.unwrap();
-
+    for stream in listener.incoming() {  // 如果测试 ,可以加一下 .take(2)  , 这样它只拿2个请求出来
+        let stream = stream.unwrap();
         pool.execute(|| handle_connection(stream));
     }
 
