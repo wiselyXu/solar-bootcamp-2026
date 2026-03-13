@@ -1,9 +1,9 @@
 use std::{
     sync::{
         Arc, Mutex,
-        mpsc::{self, Receiver},
+        mpsc::{self},
     },
-    thread::{self, Thread},
+    thread::{self},
 };
 
 struct Worker {
@@ -16,6 +16,7 @@ impl Worker {
         let thread = thread::spawn(move || {
             loop {
                 let job = receiver.lock().unwrap().recv().unwrap();
+                // receiver 锁已释放 ， MutexGuard.
                 println!("worker {id} got a job; executing");
                 job();
             }
