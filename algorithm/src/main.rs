@@ -1,27 +1,32 @@
 mod algorithms;
 mod book;
 
-
-
 use std::io;
 
-use crate::{algorithms::{
-    exam01::{self, get_combine_ways, get_ports, get_vans},
-    list::{print_list_node, remove_nth_from_end, vec_to_list_node},
-    num::is_narcissistic,
-    read_helper::{read_vec, read_vec_i32_bracket},
-    sort::{bubble_sort, insert_sort, insertion_sort_ai, move_right, select_sort, select_sort2},
-    string_op::{reverse_part, reverse_part_2},
-}, book::fifteen};
+use crate::{
+    algorithms::{
+        exam01::{self, get_combine_ways, get_ports, get_vans},
+        list::{print_list_node, remove_nth_from_end, vec_to_list_node},
+        num::is_narcissistic,
+        read_helper::{read_vec, read_vec_i32_bracket},
+        sort::{
+            bubble_sort, insert_sort, insertion_sort_ai, move_right, select_sort, select_sort2,
+        },
+        string_op::{reverse_part, reverse_part_2},
+    },
+    book::{fifteen, seventeen},
+};
 
 fn main() {
     //test_algorithms();
-     test_book();
+    // test_book();
+    println!("from main reason");
+    seventeen::hello_async::sub_main();
 }
 
 fn test_book() {
-   //book::fifteen::test_cons();
-   fifteen::sub_main();
+    //book::fifteen::test_cons();
+    fifteen::sub_main();
 }
 
 fn test_algorithms() {

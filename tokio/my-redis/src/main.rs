@@ -1,24 +1,26 @@
+use std::collections::VecDeque;
+
+use mini_redis::{Connection, Frame, server::run};
 use tokio::net::{TcpListener, TcpStream};
-use mini_redis::{Connection, Frame};
 #[tokio::main]
 async fn main() {
+    // let handle = tokio::spawn(async {
+    //     // Do some async work
+    //     "return value"
+    // });
+    // let out = handle.await.unwrap();
+    // println!("GOT {}", out);
+    let listener = TcpListener::bind("127.0.0.1:6379").await.unwrap();
+    loop {
+        let (socket, _) = listener.accept().await.unwrap();
 
-    let handle = tokio::spawn(async {
-        // Do some async work
-        "return value"
-    });
-    let out = handle.await.unwrap();
-    println!("GOT {}", out);
-    // let listener = TcpListener::bind("127.0.0.1:6379").await.unwrap();
-    // loop {
-    //     let (socket, _) = listener.accept().await.unwrap();
-    //     println!("accepted connection");
-    //     tokio::spawn(async move {
-    //         process(socket).await;
-    //     });
-    // }
+        println!("accepted connection");
+        process(socket).await;
+        // tokio::spawn(async move {
+        //     process(socket).await;
+        // });
+    }
 }
-
 
 async fn process(socket: TcpStream) {
     // let mut buf = [0; 1024];
@@ -31,14 +33,29 @@ async fn process(socket: TcpStream) {
     // }
 
     let mut connection = Connection::new(socket);
-    if let Some(frame) =  connection.read_frame().await.unwrap() {
+    if let Some(frame) = connection.read_frame().await.unwrap() {
         println!("got frame: {:?}", frame);
-        //connection.write_frame(frame).await.unwrap();   
+        //connection.write_frame(frame).await.unwrap();
         let response = Frame::Error("unimplemented ".to_string());
         connection.write_frame(&response).await.unwrap();
     }
     // while let Some(frame) = connection.read_frame().await.unwrap() {
     //     println!("got frame: {:?}", frame);
-    //     connection.write_frame(frame).await.unwrap();   
-
+    //     connection.write_frame(frame).await.unwrap();
 }
+
+// 使用展开的 tokio::main， 调用异步
+
+// fn main() {
+
+//     // 直接用  #[tokio::main] 展开后， 就是这样的。
+//     let mut runtime = tokio::runtime::Runtime::new().unwrap();
+//     runtime.block_on(async {
+//         let handle = tokio::spawn(async {
+//             // Do some async work
+//             "return value22"
+//         });
+//         let out = handle.await.unwrap();
+//         println!("GOT {}", out);
+//     });
+// }
