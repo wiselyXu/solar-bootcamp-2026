@@ -9,7 +9,9 @@ pub fn sub_main() {
 
     // spaw_print();
     // thread_print();
-    async_print();
+    // async_print();
+    // async_channel();
+    async_channel_interval();
 }
 
 fn single_title() {
@@ -122,6 +124,7 @@ fn thread_print() {
 
 fn async_print() {
     println!("two async !");
+
     trpl::block_on(async {
         let fut1 = async {
             for i in 0..10 {
@@ -133,17 +136,94 @@ fn async_print() {
         let fut2 = async {
             for i in 0..5 {
                 println!("2nd task seq: {i} ");
-                trpl::sleep(Duration::from_millis(500)).await;
+                trpl::sleep(Duration::from_millis(1000)).await;
             }
         };
 
-        let fut3 = async {
-            for i in 0..15 {
-                println!("3rd task seq: {i} ");
-                trpl::sleep(Duration::from_millis(500)).await;
-            }
-        };
-
-        trpl::join(fut3, fut2).await;
+        // for i in 0..3 {
+        //     println!("3rd task seq: {i} ");
+        //     thread::sleep(Duration::from_micros(500));
+        // }
+        trpl::join(fut1, fut2).await;
     });
+
+    // 异步任务 会先执行， 这个最后执行， 有点顺序， 感觉像是不同的运行时， 在操作
+    // for i in 0..3 {
+    //     println!("3rd task seq: {i} ");
+    //     thread::sleep(Duration::from_micros(500));
+    // }
+}
+
+// std  下的channel 是同步阻塞的。 这里异步的， 是非阻塞的
+fn async_channel() {
+    trpl::block_on(async {
+        let (tx, mut rx) = trpl::channel();
+        // let val = String::from("hi");
+        // tx.send(val).unwrap(); // 类型第一次定好就定好了， 后面不能再定的。
+
+        // //tx.send(1258).unwrap();
+        // let received = rx.recv().await.unwrap();
+        // println!("received  '{received}'");
+
+        let vals = vec![
+            String::from("hi"),
+            String::from("from"),
+            String::from("the"),
+            String::from("future"),
+        ];
+
+        for val in vals {
+            tx.send(val).unwrap();
+            trpl::sleep(Duration::from_millis(1000)).await;
+        }
+
+        while let Some(value) = rx.recv().await {
+            println!("received '{value}'");
+        }
+    })
+}
+
+fn async_channel_interval() {
+    println!("should send intervally");
+    trpl::block_on(async {
+        let (tx, mut rx) = trpl::channel();
+
+        let tx1 = tx.clone();
+        let tx1_fut = async move {
+            let vals = vec![
+                String::from("hi"),
+                String::from("from"),
+                String::from("the"),
+                String::from("future"),
+            ];
+
+            for val in vals {
+                tx1.send(val).unwrap();
+                trpl::sleep(Duration::from_millis(500)).await;
+            }
+        };
+
+        let rx_fut = async {
+            while let Some(value) = rx.recv().await {
+                println!("received '{value}'");
+            }
+        };
+
+        let tx_fut = async move {
+            let vals = vec![
+                String::from("more"),
+                String::from("message"),
+                String::from("for"),
+                String::from("you"),
+            ];
+
+            for val in vals {
+                tx.send(val).unwrap();
+                trpl::sleep(Duration::from_millis(500)).await;
+            }
+        };
+
+        //   trpl::join(tx_fut, rx_fut).await;
+        trpl::join!(tx_fut, tx1_fut, rx_fut);
+    })
 }
