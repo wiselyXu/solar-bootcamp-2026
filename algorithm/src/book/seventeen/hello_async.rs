@@ -3,6 +3,8 @@ use std::{thread, time::Duration};
 
 use trpl::{Either, Html};
 
+use crate::algorithms::test;
+
 pub fn sub_main() {
     // single_title();
     // double_title();
@@ -11,7 +13,14 @@ pub fn sub_main() {
     // thread_print();
     // async_print();
     // async_channel();
-    async_channel_interval();
+    // async_channel_interval();
+    // yield_to_runtime();
+    // yield_to_runtime2();
+    // yield_to_runtime3();
+    // yield_to_runtime4(); // yield_now
+    println!("in hello_async");
+    // test_timeout();
+    test_pin();
 }
 
 fn single_title() {
@@ -226,4 +235,189 @@ fn async_channel_interval() {
         //   trpl::join(tx_fut, rx_fut).await;
         trpl::join!(tx_fut, tx1_fut, rx_fut);
     })
+}
+
+fn slow(name: &str, ms: u64) {
+    thread::sleep(Duration::from_millis(ms));
+    println!("{name}' process {ms} ms!");
+}
+
+// slow 里面的sleep 是同步的， 所以一个一个的等，  顺序的， 但  trpl::sleep 是异步的， finished 也间隔了。
+// 输出 a' started
+// a' process 300 ms!
+// a' process 100 ms!
+// a' process 200 ms!
+//  b' started
+// b' process 200 ms!
+// b' process 100 ms!
+// b' process 3500 ms!
+//  a' finished
+//  b' finished
+
+fn yield_to_runtime() {
+    trpl::block_on(async {
+        let a = async {
+            println!(" a' started ");
+            slow("a", 300);
+            slow("a", 100);
+            slow("a", 200);
+            trpl::sleep(Duration::from_millis(1000)).await;
+            println!(" a' finished ");
+        };
+
+        let b = async {
+            println!(" b' started ");
+            slow("b", 200);
+            slow("b", 100);
+            slow("b", 3500);
+            trpl::sleep(Duration::from_millis(1000)).await;
+            println!(" b' finished ");
+        };
+
+        trpl::join(a, b).await;
+    });
+}
+
+// 去除两个     trpl::sleep  会怎样？
+// 还是整齐的打印的
+// a' started
+// a' process 300 ms!
+// a' process 100 ms!
+// a' process 200 ms!
+//  a' finished
+//  b' started
+// b' process 200 ms!
+// b' process 100 ms!
+// b' process 3500 ms!
+//  b' finished
+
+fn yield_to_runtime2() {
+    println!("without trpl::sleep");
+
+    trpl::block_on(async {
+        let a = async {
+            println!(" a' started ");
+            slow("a", 300);
+            slow("a", 100);
+            slow("a", 200);
+            println!(" a' finished ");
+        };
+
+        let b = async {
+            println!(" b' started ");
+            slow("b", 200);
+            slow("b", 100);
+            slow("b", 3500);
+            println!(" b' finished ");
+        };
+
+        trpl::join(a, b).await;
+    });
+}
+
+fn yield_to_runtime3() {
+    println!("gap one trpl::sleep");
+    let one_millis = Duration::from_millis(1);
+
+    trpl::block_on(async {
+        let a = async {
+            println!(" a' started ");
+            slow("a", 300);
+            trpl::sleep(one_millis).await;
+            slow("a", 100);
+            trpl::sleep(one_millis).await;
+            slow("a", 200);
+            trpl::sleep(one_millis).await;
+            println!(" a' finished ");
+        };
+
+        let b = async {
+            println!(" b' started ");
+            slow("b", 200);
+            trpl::sleep(one_millis).await;
+            slow("b", 100);
+            trpl::sleep(one_millis).await;
+            slow("b", 3500);
+            trpl::sleep(one_millis).await;
+            println!(" b' finished ");
+        };
+
+        trpl::join(a, b).await;
+    });
+}
+
+fn yield_to_runtime4() {
+    println!("gap one trpl::yield_now");
+    let one_millis = Duration::from_millis(1);
+
+    trpl::block_on(async {
+        let a = async {
+            println!(" a' started ");
+            slow("a", 300);
+            trpl::yield_now().await;
+            slow("a", 100);
+            trpl::yield_now().await;
+            slow("a", 200);
+            trpl::yield_now().await;
+            println!(" a' finished ");
+        };
+
+        let b = async {
+            println!(" b' started ");
+            slow("b", 200);
+            trpl::yield_now().await;
+            slow("b", 100);
+            trpl::yield_now().await;
+            slow("b", 3500);
+            trpl::yield_now().await;
+            println!(" b' finished ");
+        };
+
+        trpl::join(a, b).await;
+    });
+}
+
+// build our own Async  abstraction
+async fn timeout<F: Future>(future_to_try: F, max_time: Duration) -> Result<F::Output, Duration> {
+    match trpl::select(future_to_try, trpl::sleep(max_time)).await {
+        Either::Left(output) => Ok(output),
+        Either::Right(_) => Err(max_time),
+    }
+}
+
+fn test_timeout() {
+    println!("test_timeout,,,,,");
+    trpl::block_on(async {
+        let slow = async {
+            trpl::sleep(Duration::from_secs(5)).await;
+            "finally finished"
+        };
+
+        match timeout(slow, Duration::from_secs(2)).await {
+            Ok(message) => println!("succeeded with  '{message}'"),
+            Err(duration) => {
+                println!("Failed after {} seconds", duration.as_secs());
+            }
+        }
+    });
+}
+
+fn test_pin() {
+    println!("test_ping function , to describe the pin concept");
+    trpl::block_on(async {
+        let mut x = 5;
+        let mut y = 10;
+
+        let x_ref = &mut x;
+        let y_ref = &mut y;
+
+        println!("Before pinning: x = {}, y = {}", x_ref, y_ref);
+
+        // Pinning the references
+        let pinned_x = std::pin::Pin::new(x_ref);
+        let pinned_y = std::pin::Pin::new(y_ref);
+
+        // Now we cannot move the pinned references, but we can still access their values
+        println!("After pinning: x = {}, y = {}", pinned_x, pinned_y);
+    });
 }
