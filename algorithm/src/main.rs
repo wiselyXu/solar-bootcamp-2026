@@ -1,5 +1,6 @@
 mod algorithms;
 mod book;
+pub mod leetcode;
 
 use std::io;
 
@@ -21,7 +22,9 @@ fn main() {
     //test_algorithms();
     // test_book();
     println!("from main reason");
-    seventeen::hello_async::sub_main();
+    //seventeen::hello_async::sub_main();
+    leetcode::max::sub_main();
+
 }
 
 fn test_book() {
