@@ -1,10 +1,140 @@
-use std::collections::HashMap;
+use core::num;
+use std::{collections::HashMap, thread::current};
 
 pub fn sub_main() {
     // test_max();
     // test_two_sum_01();
-    test_group_anagrams_49();
+    //test_group_anagrams_49();
     // test_will_sort_string();
+
+    // test_product_of_array_except_self_23_2();
+    test_longest_Consecutive_Sequence_128();
+}
+
+fn test_longest_Consecutive_Sequence_128() {
+    println!(
+        " [100, 4, 200, 1, 3, 2] 最长连续序列的长度是: {}",
+        longest_Consecutive_Sequence_128(vec![100, 4, 200, 1, 3, 2])
+    );
+
+    println!(
+        " [0,3,7,2,5,8,4,6,0,1] 最长连续序列的长度是: {}",
+        longest_Consecutive_Sequence_128(vec![0, 3, 7, 2, 5, 8, 4, 6, 0, 1])
+    );
+
+    println!(
+        " [1,0,1,2] 最长连续序列的长度是: {}",
+        longest_Consecutive_Sequence_128(vec![1, 0, 1, 2])
+    );
+}
+
+/**
+ * 128. 最长连续序列  
+ *   这个要用并查集 与 哈希来处理吗？
+ *   这个没那么复杂，排好充后 遍历一次就好
+ *  定一常量表示最大长  max_len
+ * 从头开始遍历，定义cur_len = 1 ,如果后一个比前一个大1，cur_len +1,不大， cur_len 重新置为1, 每次更新 max_len = max(max_len, cur_len)
+ *
+ * 相等的， 不用重置 ， 但也不增加， 因为重复的数不影响连续序列的长度， 继续往下走就好
+ */
+fn longest_Consecutive_Sequence_128(nums: Vec<i32>) -> i32 {
+    let len = nums.len();
+    if len == 0 {
+        return 0;
+    }
+    if len == 1 {
+        return 1;
+    }
+    let mut max_len = 1;
+    let mut nums = nums;
+    let mut cur_len = 1;
+    nums.sort_unstable();
+    for i in 1..nums.len() {
+        if nums[i] == nums[i - 1] + 1 {
+            cur_len += 1;
+        } else if nums[i] != nums[i - 1] {
+            max_len = std::cmp::max(max_len, cur_len); // 如果相等， 就继续， 因为重复的数不影响连续序列的长度
+            cur_len = 1; // 重新置为1
+        }
+    }
+
+    std::cmp::max(max_len, cur_len)
+
+    // 下面这个是没排序处理的， 也是可以的， 直接contains， 但应该不是o(n)
+    // for num in nums {
+    //     let mut cur_len = 1;
+    //     while nums.contains(&(num + cur_len)) {
+    //         cur_len += 1;
+    //     }
+    //     max_len = std::cmp::max(max_len, cur_len);
+    // }
+}
+
+fn test_product_of_array_except_self_23_2() {
+    let result = product_of_array_except_self_23_2([-1, 1, 0, -3, 3].to_vec());
+    println!("结果是: {:?}", result);
+}
+
+/**
+ * 238. 除自身以外数组的乘积
+ * 1， 维护一个结果数组， result , 初始化为全1 的数组，
+ * 2， 循环两次， 第一次循环计算左侧积， 第二次循环计算右侧积并更新结果
+ * 3， 最后返回结果数组
+ * （0..n).rev() 这个语法是 Rust 中的一个迭代器适配器， 它会创建一个从 n-1 到 0 的迭代器， 也就是反向迭代器， 这样我们就可以从右向左遍历数组了
+ *
+ * 这个 我还是不太好想出来， 现在也没相清楚， 先放一下。
+ */
+fn product_of_array_except_self_238(nums: Vec<i32>) -> Vec<i32> {
+    let n = nums.len();
+    let mut result = vec![1; n];
+
+    // 计算左侧积
+    for i in 1..n {
+        result[i] = result[i - 1] * nums[i - 1];
+    }
+
+    // 计算右侧积并更新结果
+    let mut right_product = 1;
+    for i in (0..n).rev() {
+        result[i] *= right_product;
+        right_product *= nums[i];
+    }
+
+    result
+}
+
+/**
+ * 如果无素中有1 个以上的0 ， 那么， 所有的结果都是0， 因为任何数乘以0 都是0
+ * 如果无素中有1 个0， 那么， 结果中只有那个0
+ * 如果没有0， 那么， 结果中每个元素都是所有元素的积除以当前元素的值
+ *
+ *  这个速度是最快的， 我自己想， 当然AI 也顺着我想的， 去写， 最多2次循环。
+ */
+fn product_of_array_except_self_23_2(nums: Vec<i32>) -> Vec<i32> {
+    let mut result = vec![0; nums.len()];
+    let mut product = 1;
+    let mut zero_count = 0;
+    let mut zero_index = -1;
+    for i in 0..nums.len() {
+        if nums[i] == 0 {
+            zero_count += 1;
+            zero_index = i as i32;
+        } else {
+            product *= nums[i];
+        }
+    }
+
+    if zero_count > 1 {
+        return result; // 所有结果都是0
+    } else if zero_count == 1 {
+        result[zero_index as usize] = product; // 只有那个0的结果是product
+    } else {
+        for i in 0..nums.len() {
+            result[i] = product / nums[i]; // 每个元素都是所有元素的积除以当前元素的值
+        }
+    }
+
+    result
 }
 
 // 217. 存在重复元素, 可以用map 来解， 当然这里也有set ，
@@ -125,11 +255,9 @@ fn group_anagrams_49_3(strs: Vec<String>) -> Vec<Vec<String>> {
         map.entry(count).or_insert(Vec::new()).push(s);
     }
 
-    map.into_values().collect::<Vec<Vec<String>>>()  // 它与  map.into_values().collect() 的区别是， 前者会把 map 中的值收集到一个 Vec<Vec<String>> 中， 
-    //后者会把 map 中的值收集到一个 Vec<Vec<String>> 中， 但是前者会指定类型， 后者会根据上下文推断类型， 在这个例子中， 
+    map.into_values().collect::<Vec<Vec<String>>>() // 它与  map.into_values().collect() 的区别是， 前者会把 map 中的值收集到一个 Vec<Vec<String>> 中， 
+    //后者会把 map 中的值收集到一个 Vec<Vec<String>> 中， 但是前者会指定类型， 后者会根据上下文推断类型， 在这个例子中，
     //前者会更明确一些， 因为我们知道我们要收集成一个 Vec<Vec<String>>， 所以指定类型会更好一些
-
-    
 }
 
 fn will_sort_string(s: String) -> String {
