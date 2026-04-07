@@ -15,7 +15,7 @@ use crate::{
         },
         string_op::{reverse_part, reverse_part_2},
     },
-    book::{fifteen, seventeen},
+    book::{fifteen, seventeen, twenty},
 };
 
 fn main() {
@@ -23,8 +23,8 @@ fn main() {
     // test_book();
     println!("from main reason");
     //seventeen::hello_async::sub_main();
-    leetcode::max::sub_main();
-
+    //  leetcode::max::sub_main();
+    twenty::unsafe_mod::sub_main();
 }
 
 fn test_book() {
