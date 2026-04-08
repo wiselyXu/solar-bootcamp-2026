@@ -19,6 +19,7 @@ dependencies = [
 name = "algorithm"
 version = "0.1.0"
 dependencies = [
+ "cc",
  "trpl",
 ]
 
