@@ -7,3 +7,4 @@ pub mod max;
 pub mod my_lru_cache;
 pub mod my_lru_cache_v2;
 pub mod my_lru_cache_v3;
+pub mod day2;

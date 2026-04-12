@@ -11,6 +11,7 @@ impl LRUCache {
             capacity,
             key_list: std::collections::LinkedList::new(),
         }
+
     }
 
     pub fn get(&mut self, key: i32) -> Option<i32> {

@@ -23,8 +23,9 @@ fn main() {
     // test_book();
     println!("from main reason");
     //seventeen::hello_async::sub_main();
-      leetcode::max::sub_main();
+    //  leetcode::max::sub_main();
     //twenty::unsafe_mod::sub_main();
+    leetcode::day2::sub_main();
 }
 
 fn test_book() {
