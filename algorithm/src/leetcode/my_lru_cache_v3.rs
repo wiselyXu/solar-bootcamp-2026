@@ -1,32 +1,33 @@
 use std::cell::RefCell;
 use std::collections::HashMap;
 use std::rc::Rc;
-
+// 纯后写  链表结构 ， 实现LRU， 用的是AI生成的代码 ， 手抄起来有点累呀。而且有点抄不懂
 type Link = Option<Rc<RefCell<Node>>>;
+//type Link = Option<Node>;
 
-#[derive(Debug)]
 struct Node {
     key: i32,
     value: i32,
-    prev: Link,
+    prev: Link, // 不像java 样可以写为NODE，   rust 会认为是无限长度  infinite size
     next: Link,
 }
 
-struct LRUCache {
+pub struct LRUCache {
     capacity: usize,
-    cache: HashMap<i32, Rc<RefCell<Node>>>,  // key -> Node 指针
-    head: Link,   // 哨兵头节点（最久未使用）
-    tail: Link,   // 哨兵尾节点（最近使用）
+    map: HashMap<i32, Rc<RefCell<Node>>>, // 不是我想的直接Node
+    head: Link,                           //不用node
+    tail: Link,
 }
 
 impl LRUCache {
-    fn new(capacity: i32) -> Self {
+    pub fn new(capacity: i32) -> LRUCache {
         let head = Rc::new(RefCell::new(Node {
             key: -1,
             value: -1,
             prev: None,
             next: None,
         }));
+
         let tail = Rc::new(RefCell::new(Node {
             key: -1,
             value: -1,
@@ -34,106 +35,171 @@ impl LRUCache {
             next: None,
         }));
 
-        // 连接哨兵节点
-        head.borrow_mut().next = Some(Rc::clone(&tail));
-        tail.borrow_mut().prev = Some(Rc::clone(&head));
+        head.borrow_mut().next = Some(Rc::clone(&head));
+        tail.borrow_mut().prev = Some(Rc::clone(&tail));
+
 
         LRUCache {
             capacity: capacity as usize,
-            cache: HashMap::new(),
+            map: HashMap::new(),
             head: Some(head),
             tail: Some(tail),
         }
     }
 
-    fn get(&mut self, key: i32) -> i32 {
-        if let Some(node) = self.cache.get(&key) {
+    pub fn get(&mut self, key: i32) -> i32 {
+        if let Some(node) = self.map.get(&key) {
             let node_rc = Rc::clone(node);
-            self.move_to_tail(&node_rc);   // O(1) 移动到最近使用位置
-            node_rc.borrow().value
+            self.move_to_tail(&node_rc);
+            node_rc.borrow().value // 明明 .value 出不来的， 但没报错
         } else {
             -1
         }
     }
 
-    fn put(&mut self, key: i32, value: i32) {
-        if let Some(node) = self.cache.get(&key) {
-            // 已存在：更新值 + 移动到尾部
-            let node_rc = Rc::clone(node);
+    // 如果存在 ，先设置新值，再 像get 一样  remove_to_tail
+    // 如不存在， 则直接新建node， add_to_tail
+    pub fn put(&mut self, key: i32, value: i32) {
+        if let Some(exist_node) = self.map.get(&key) {
+            //exist_node.borrow_mut().value = value;
+            let node_rc = Rc::clone(exist_node);
             {
                 let mut n = node_rc.borrow_mut();
                 n.value = value;
             }
             self.move_to_tail(&node_rc);
-            return;
+        } else {
+            if self.map.len() >= self.capacity {
+                self.evict_node();
+            }
+
+            let new_node = Rc::new(RefCell::new(Node {
+                key,
+                value,
+                prev: None,
+                next: None,
+            }));
+
+            self.map.insert(key, Rc::clone(&new_node));
+            self.add_to_tail(&new_node);
         }
-
-        // 新节点
-        if self.cache.len() >= self.capacity {
-            self.remove_lru();   // 删除最久未使用的节点
-        }
-
-        // 创建新节点并插入到尾部
-        let new_node = Rc::new(RefCell::new(Node {
-            key,
-            value,
-            prev: None,
-            next: None,
-        }));
-
-        self.cache.insert(key, Rc::clone(&new_node));
-        self.add_to_tail(&new_node);
     }
+    // ---------------------  私有方法  ---------------
 
-    // ==================== 核心 O(1) 操作 ====================
-
-    // 把节点移动到尾部（最近使用）
     fn move_to_tail(&mut self, node: &Rc<RefCell<Node>>) {
         self.remove_node(node);
         self.add_to_tail(node);
     }
 
-    // 从链表中删除一个节点（O(1)）
-    fn remove_node(&mut self, node: &Rc<RefCell<Node>>) {
-        let prev = node.borrow().prev.as_ref().unwrap().clone();
-        let next = node.borrow().next.as_ref().unwrap().clone();
+    // 将节点移到队尾， 表示最新活动的， 新加的直接用这个 就可以了， 但如果是老的， 需要调本方法前先删除
+    fn add_to_tail_v2(&mut self, node: &Rc<RefCell<Node>>) {
+        //-- 检查
+        // if let Some(last) = &self.head.as_ref().unwrap().borrow().next {
+        //     if last.borrow().key != -1 {
+        //         println!("已有非head的前节点， 它的key {}",last.borrow().key);
+        //     }else {
+        //         println!("还处于初始,它的key {}",last.borrow().key);
+        //     }
+        // }
+        //----
+        // let prev = tail.borrow().prev.as_ref().unwrap().borrow().prev;
 
-        prev.borrow_mut().next = Some(Rc::clone(&next));
-        next.borrow_mut().prev = Some(Rc::clone(&prev));
-    }
+        //let tail = self.tail.as_ref().unwrap(); //.cloned();  // 为什么要clone呢， clone 出来 好像是浅拷贝，不是深的
+        // let tail = self.tail.as_ref().cloned();
+        // let prev = tail.unwrap().borrow().prev.clone();
 
-    // 在尾部添加一个节点（O(1)）
-    fn add_to_tail(&mut self, node: &Rc<RefCell<Node>>) {
-        let tail = self.tail.as_ref().unwrap();
-        let prev = tail.borrow().prev.as_ref().unwrap().clone();
+        // prev.borrow_mut().next = Some(Rc::clone(node));
+        // tail.borrow_mut().prev = Some(Rc::clone(node));
 
+        // node.borrow_mut().prev = Some(Rc::clone(&prev));
+        // node.borrow_mut().next = Some(Rc::clone(tail));
+
+        let tail = self.tail.as_ref().unwrap().clone(); // Rc 克隆（引用计数+1）
+        let prev = tail.borrow().prev.as_ref().unwrap().clone(); // prev 应该是当前最后一个节点（或 head）
+
+        // 1. 把新节点插入到 prev 和 tail 之间
         prev.borrow_mut().next = Some(Rc::clone(node));
         tail.borrow_mut().prev = Some(Rc::clone(node));
 
+        // 2. 设置新节点的 prev 和 next
         node.borrow_mut().prev = Some(Rc::clone(&prev));
-        node.borrow_mut().next = Some(Rc::clone(tail));
+        node.borrow_mut().next = Some(Rc::clone(&tail));
+
+        if let Some(last) = &self.head.as_ref().unwrap().borrow().next {
+            if last.borrow().key != -1 {
+                println!("已插入节点， 它的key {}", last.borrow().key);
+            } else {
+                println!("仍然指向了 尾节点")
+            }
+        }
+
+        if let Some(first) = &self.tail.as_ref().unwrap().borrow().prev {
+            if first.borrow().key != -1 {
+                println!("已插入节点， 它的key {}", first.borrow().key);
+            } else {
+                println!("仍然指向了 头节点")
+            }
+        }
     }
 
-    // 删除最久未使用的节点（头部第一个真实节点）
-    fn remove_lru(&mut self) {
-        let head = self.head.as_ref().unwrap().clone();  // 先 clone 哨兵头节点
-
-        // 获取最久未使用的节点（head.next）
-        let first = {
-            let head_ref = head.borrow();
-            head_ref.next.as_ref().cloned()              // 只在这一小块作用域内 borrow
+    fn add_to_tail(&mut self, node: &Rc<RefCell<Node>>) {
+        let tail = self.tail.as_ref().unwrap().clone();
+        let prev = {
+            let tail_borrow = tail.borrow();
+            tail_borrow.prev.as_ref().unwrap().clone()
         };
-    
-        if let Some(first_node) = first {
-            if first_node.borrow().key == -1 {
-                return; // 没有真实节点
+
+        // 插入新节点
+        prev.borrow_mut().next = Some(Rc::clone(node));
+        tail.borrow_mut().prev = Some(Rc::clone(node));
+
+        // 设置新节点的前后指针
+        node.borrow_mut().prev = Some(Rc::clone(&prev));
+        node.borrow_mut().next = Some(Rc::clone(&tail));
+
+        ////
+        ///
+        ///
+        if let Some(last) = &self.head.as_ref().unwrap().borrow().next {
+            if last.borrow().key != -1 {
+                println!("已插入节点， 它的key {}", last.borrow().key);
+            } else {
+                println!("仍然指向了 尾节点")
             }
-    
-            let key = first_node.borrow().key;
-    
-            // 关键：先结束所有不可变借用，再进行可变操作
-            self.remove_node(&first_node);
-            self.cache.remove(&key);
         }
+
+        if let Some(first) = &self.tail.as_ref().unwrap().borrow().prev {
+            if first.borrow().key != -1 {
+                println!("已插入节点， 它的key {}", first.borrow().key);
+            } else {
+                println!("仍然指向了 头节点")
+            }
+        }
+    }
+
+    // 删除最久没有用的节点， 即头部第一个真实节点
+    fn evict_node(&mut self) {
+        let node = &self.head;
+
+        if let Some(head) = &self.head {
+            //let Some(_node) = self.head.unwrap().borrow().next ;
+
+            if let Some(first) = head.borrow().next.clone() {
+                if first.borrow().key != -1 {
+                    let key = first.borrow().key;
+                    self.remove_node(&first);
+                    self.map.remove(&key);
+                }
+            }
+        }
+    }
+
+    fn remove_node(&self, node: &Rc<RefCell<Node>>) {
+        // 这个节点的 前 节点 拿出来，   后节点也拿出来， 由于代码的控制， 前后节点都不可能为空， 即不会将两个哨兵节点传过来
+        let prev = node.borrow_mut().prev.as_ref().unwrap().clone();
+        let next = node.borrow_mut().next.as_ref().unwrap().clone();
+
+        prev.borrow_mut().next = Some(Rc::clone(&next));
+        next.borrow_mut().prev = Some(Rc::clone(&prev));
     }
 }

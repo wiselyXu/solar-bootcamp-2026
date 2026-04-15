@@ -1,7 +1,7 @@
 use core::num;
 use std::{collections::HashMap, thread::current};
 
-use crate::leetcode::{my_lru_cache, my_lru_cache_v2};
+use crate::leetcode::{my_lru_cache, my_lru_cache_v2, my_lru_cache_v3, my_lru_cache_v4};
 
 pub fn sub_main() {
     // test_max();
@@ -16,15 +16,26 @@ pub fn sub_main() {
 
 fn test_my_lru_cache() {
    // let mut cache = my_lru_cache::LRUCache::new(2); // 缓存容量为 2
-   let mut cache = my_lru_cache_v2::LRUCache::new(2); // 缓存容量为 2
+//    let mut cache = my_lru_cache_v2::LRUCache::new(2); // 缓存容量为 2
+
+let mut cache = my_lru_cache_v4::LRUCache::new(2);
     cache.put(1, 1);
     cache.put(2, 2);
-    println!("get(1) = {:?}", cache.get(1).unwrap_or(-1)); // 返回 1
-    cache.put(3, 3); // 该操作会使得密钥 2 作废
-    println!("get(2) = {:?}", cache.get(2).unwrap_or(-1)); // 返回 -1 (未找到)
-    cache.put(4, 4); // 该操作会使得密钥 3 作废
-    println!("get(3) = {:?}", cache.get(3).unwrap_or(-1)); // 返回 -1 (未找到)
-    println!("get(4) = {:?}", cache.get(4).unwrap_or(-1)); // 返回 4
+
+
+     println!("get(1) = {:?}", cache.get(1)); // 返回 1
+     cache.put(3, 3); // 该操作会使得密钥 2 作废
+     println!("get(2) = {:?}", cache.get(2)); // 返回 -1 (未找到)
+     cache.put(4, 4); // 该操作会使得密钥 3 作废
+     println!("get(3) = {:?}", cache.get(3)); // 返回 -1 (未找到)
+     println!("get(4) = {:?}", cache.get(4)); // 返回 4
+
+    // println!("get(1) = {:?}", cache.get(1).unwrap_or(-1)); // 返回 1
+    // cache.put(3, 3); // 该操作会使得密钥 2 作废
+    // println!("get(2) = {:?}", cache.get(2).unwrap_or(-1)); // 返回 -1 (未找到)
+    // cache.put(4, 4); // 该操作会使得密钥 3 作废
+    // println!("get(3) = {:?}", cache.get(3).unwrap_or(-1)); // 返回 -1 (未找到)
+    // println!("get(4) = {:?}", cache.get(4).unwrap_or(-1)); // 返回 4
 }
 
 fn test_longest_Consecutive_Sequence_128() {
