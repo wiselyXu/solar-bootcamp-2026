@@ -15,7 +15,7 @@ use crate::{
         },
         string_op::{reverse_part, reverse_part_2},
     },
-    book::{fifteen, seventeen, twenty}, leetcode::day3,
+    book::{fifteen, seventeen, twenty}, leetcode::{day3, day4},
 };
 
 fn main() {
@@ -26,7 +26,9 @@ fn main() {
     // leetcode::max::sub_main();
     //twenty::unsafe_mod::sub_main();
  //   leetcode::day2::sub_main();
-     day3::case::sub_main();
+    // day3::case::sub_main();
+    day4::function::sub_main();
+    
 }
 
 fn test_book() {
