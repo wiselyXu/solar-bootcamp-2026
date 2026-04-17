@@ -161,29 +161,75 @@ fn level_order_102(root:Option<Rc<RefCell<TreeNode>>>) ->Vec<Vec<i32>>{
 
 /**
  * 使用 leetcode 上的 vecDeque  ， 作为队列，理简洁些
+ * //  用LinkedList 也是一样的效果的， 它的想法是 这个队列在循环它时，长度是固定的，，  queue.len()  就算后面加了内容，也不会增长， 除非重新获取。
  */
 fn level_order_102_v2(root:Option<Rc<RefCell<TreeNode>>>) ->Vec<Vec<i32>>{
-  let mut res = vec![];
-  let mut queue = VecDeque::new();
+
+  let mut res = Vec::new();
+ // let mut list = LinkedList::new();
+ let mut list = VecDeque::new();
   if let Some(node) = root {
-      queue.push_back(node);
+    list.push_back(node);
+  }else {
+    return res;
   }
-  while !queue.is_empty() {
-      let mut itemList = vec![];
-      for _ in 0..queue.len() {
-          let tempNode = queue.pop_front().unwrap();
-          itemList.push(tempNode.borrow().val);
-          let node_borrow = tempNode.borrow();
-          if let Some(left) = node_borrow.left.as_ref() {
-              queue.push_back(Rc::clone(left));
-          }
-          if let Some(right) = node_borrow.right.as_ref(){
-              queue.push_back(Rc::clone(right));
-          }
-      }
-      res.push(itemList);
+  
+  while !list.is_empty() {
+    let mut val_vec = Vec::new();
+    for _ in 0..list.len() {
+      //let cur_node = list.pop_front();
+      let cur_node =list.pop_front().unwrap() ;
+        val_vec.push(cur_node.borrow().val);
+        if let Some(left) = cur_node.borrow().left.clone() {
+          list.push_back(left);
+        }
+        
+        if let Some(right) = cur_node.borrow().right.clone() {
+          list.push_back(right);
+        }
+
+      
+    }
+
+    if !val_vec.is_empty() {
+      res.push(val_vec);
+    }
+    
+
   }
+
   res
+
+
+
+
+
+
+
+
+
+
+  // let mut res = vec![];
+  // let mut queue = VecDeque::new();
+  // if let Some(node) = root {
+  //     queue.push_back(node);
+  // }
+  // while !queue.is_empty() {
+  //     let mut itemList = vec![];
+  //     for _ in 0..queue.len() {
+  //         let tempNode = queue.pop_front().unwrap();
+  //         itemList.push(tempNode.borrow().val);
+  //         let node_borrow = tempNode.borrow();
+  //         if let Some(left) = node_borrow.left.as_ref() {
+  //             queue.push_back(Rc::clone(left));
+  //         }
+  //         if let Some(right) = node_borrow.right.as_ref(){
+  //             queue.push_back(Rc::clone(right));
+  //         }
+  //     }
+  //     res.push(itemList);
+  // }
+  // res
 
 }
 
@@ -195,6 +241,27 @@ fn test_102(){
   print!("{:?}",res);
 
   
+}
+
+/**
+ * 这个只是左右子树的 反转， 简单题   ， take 掉， 再放去就好
+ * 确定好， 有左 右， 才转， 其实没有也要转的
+ */
+pub fn invert_tree(root: Option<Rc<RefCell<TreeNode>>>) -> Option<Rc<RefCell<TreeNode>>> {
+    
+    match root {
+      Some(node) =>{
+        let left = node.borrow().left.clone();
+        let right = node.borrow().right.clone();
+        node.borrow_mut().left = invert_tree(right);
+        node.borrow_mut().right = invert_tree(left);
+        Some(node)
+      }
+      None => {
+        root
+      }
+    }
+         
 }
    
 
