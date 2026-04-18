@@ -15,7 +15,7 @@ use crate::{
         },
         string_op::{reverse_part, reverse_part_2},
     },
-    book::{fifteen, seventeen, twenty}, leetcode::{day3, day4, day5},
+    book::{fifteen, seventeen, thirteen, twenty}, leetcode::{day3, day4, day5},
 };
 
 fn main() {
@@ -28,7 +28,8 @@ fn main() {
  //   leetcode::day2::sub_main();
     // day3::case::sub_main();
   //  day4::function::sub_main();
-  day5::function::sub_main();
+ // day5::function::sub_main();
+ thirteen::function::sub_main();
     
 }
 
