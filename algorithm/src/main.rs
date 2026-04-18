@@ -28,8 +28,8 @@ fn main() {
  //   leetcode::day2::sub_main();
     // day3::case::sub_main();
   //  day4::function::sub_main();
- // day5::function::sub_main();
- thirteen::function::sub_main();
+  day5::function::sub_main();
+ //thirteen::function::sub_main();
     
 }
 

@@ -6,7 +6,25 @@ use std::{cell::RefCell, rc::Rc};
  */
 pub fn sub_main(){
    // println!("from leetcode/day5/function.rs")
-   test_matrix();
+ //  test_matrix();
+ //test_207()
+ test_vec();
+}
+
+
+fn test_vec(){
+
+    let mut graph  = vec![vec![];3];
+    graph[0] = vec![1,3,4];
+    graph[1] = vec![7,8];
+    graph[2] = vec![9];
+
+   // let a = graph[2][1];   它仍然 表示是 i32 ， 尽管  不存在这个下标了， 所以这个编译器， 没法检测。
+  //  println!("graph[2][1] = {}", graph[2][1] );
+    println!("graph[1][1] = {}", graph[1][1]);
+
+
+
 }
 
 /**
@@ -80,7 +98,7 @@ fn dye_0( mut grid:  Vec<Vec<char>>,  i:usize,j:usize, lines: usize, columns: us
     grid
 }
 
-use std::collections::VecDeque;
+use std::collections::{HashMap, HashSet, VecDeque};
 /**
  * 看注释， 是一越南人的
  * 它的关键就是将 需要 扩展访问的节点  放到queue中， 直到queue 取完， 这一个岛， 就算完成了
@@ -202,4 +220,120 @@ fn test_matrix() -> Vec<Vec<i32>>{
 
     println!("m(2,3) 应该是 400， 实际  {}", matrix[2][3]);
     matrix
+}
+
+
+/**
+ * 这个作为了一个中级的题目
+ * 看课程安排是否 可安排， 最重要的就是是否有依赖环的出现， 如果有，就安排不了
+ * 每个依赖描述， 就2元素  [a,b] ， 完成 a,的前提，要完成b ， 那就要看b 是否间接依赖a了 ，如 [b,c]  [c,d] [d,a]， 这样就不行
+ * a,有环，， 但了,b, c,d 都没环， 也是不行的。 
+ * b， 所有的依赖， 如果  b 中依赖的内容， 有a ， 则  a 也是没用
+ * 所以定义 一个 hashMap  
+ * 直接用 prequisites 来处理即可
+ * 梳理出所以，
+ * 
+ * 
+ * 我这么做， 超时。   40/54 的案例通过
+ */
+fn can_finish_207(num_courses: i32, prerequisites: Vec<Vec<i32>>) -> bool {
+    let mut course_dep_map = HashMap::new();
+
+    // 第一遍循环， 几乎不会有重复的情况  
+    for pair in prerequisites {
+        course_dep_map.entry(pair[0]).or_insert(HashSet::new()).insert(pair[1]);
+        let set = course_dep_map.get(&pair[0]);
+        if set.as_ref().is_some_and(|s| s.contains(&pair[0])) {
+            return false;
+        }
+    }
+
+    // 第二遍是对  map 循环， 以获得最全量的依赖, 有一个递归操作， 递归改循环，也好。 如果出现 循环依赖， 必然不能出来， 也能判断出是否包含自己， 
+    
+    for (key,mut set) in course_dep_map.clone() {
+        let mut queue = VecDeque::new();
+      //  set.iter().map(|&a| queue.push_back(a));   // map 是惰性的， 要调它才行
+          set.iter().for_each(|&a| queue.push_back(a));  // 这个意思更好
+          // queue.extend(set.iter()); 这个最简洁
+        
+        while !queue.is_empty() {
+            let course_id = queue.pop_front().unwrap();
+            let temp_set = course_dep_map.get(&course_id);
+            if temp_set.is_none() {
+                continue;
+            }
+            let temp_set = temp_set.unwrap();
+            if temp_set.is_subset(&set) {
+                    continue;
+            }
+
+            let diff: HashSet<i32> = temp_set.difference(&set).copied().collect();
+            if diff.contains(&key) {
+                return false;
+            }else{
+                queue.extend(diff.iter());
+            }   
+        }
+        
+    }
+
+    true
+        
+}
+
+
+/*
+看 AI 给写的， 就是用邻接矩阵， 来解决， ， 最终能安排 num_courses 个课程 ，那就表示，可以安排，
+  如果课程 ，完全没有 入度， 说明， 不需要 先修课程 ， 直接放已安排的就好， 然后各个有依赖的， 它的入度， 表示依赖几个， 邻接图， 存了依赖哪些
+
+  写完这一题， 其实就是要记结论， 因为我感觉 有些数学原理 ， 不一定想的起。 
+  入度一度为 0 的, 不会断层。
+ */
+fn can_finish_207_v2(num_courses: i32, prerequisites: Vec<Vec<i32>>) -> bool {
+    let mut arranged = 0;
+    let n = num_courses as usize;
+
+    // 构建邻接矩阵  和 入度表
+    let mut graph = vec![vec![]; n];
+    let mut in_degree = vec![0;n];
+    for pair in prerequisites {
+        let a = pair[0] as usize;
+        let b = pair[1] as usize;
+        // 学习a 的前提 是已学习了b， 即b 是a 的先修改课  ， 在图中  b  -> a  ， 入度， a的入度就增加 1
+        graph[b].push(a);
+        in_degree[a] +=1;
+
+    }
+
+    // 将 不需要 先置课程的 （即入度为0） 放入 队列中，  后面只是入度 为0 了 都放 queue中
+    let mut queue = VecDeque::new();   
+    for i in 0..n {
+        if in_degree[i] == 0 {
+            queue.push_back(i);
+        }
+    }
+    // 其实是否存在， 能安排 好， 但又起初没有 入度为 0 的？ 这是个数学 证明题呀， 短时间证明不好。
+
+   while let Some(bef) =   queue.pop_front() {
+      arranged +=1;
+      // 对它所有的 指向的图， 进行入度减少1 
+      let neighbors = std::mem::take(&mut graph[bef]);  // 这样， 所有的neighbor 都拿掉了。 本身也应该这样, 这样 入度减少， 那图上的 邻居也要减掉， 才一致。 虽然对解题 没帮助
+      for after in neighbors {
+    //for &after in &graph[bef] {
+        in_degree[after] -=1;
+        if in_degree[after] ==0 {
+            queue.push_back(after);
+        }
+
+      }
+   }
+    arranged == num_courses
+
+}
+
+
+fn test_207(){
+   // let prerequistes = vec![vec![1,0],vec![0,1]];
+   let prerequistes = vec![vec![1,0]];
+    println!("{}",can_finish_207(2,prerequistes));
 }
